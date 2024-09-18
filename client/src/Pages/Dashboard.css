@@ -1,0 +1,115 @@
+/* Navbar styles */
+.navbar {
+
+  height: 60px; /* Increased height for better visibility */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px; /* Increased font size */
+  position: fixed;
+  top: 0px;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Ensure it stays above other content */
+}
+
+.navbar h1 {
+  margin: 0;
+  font-size: 38px; /* Increased font size */
+  color: rgb(14, 2, 2);
+}
+
+/* Container for the dashboard */
+.container {
+  display: flex;
+  padding: 10px;
+  margin-top: 60px; /* Adjusted to avoid overlap with the navbar */
+}
+
+/* Side navigation styles */
+.side-nav {
+  width: 330px; /* Increased width for better navigation */
+  padding: 20px; /* Increased padding */
+  background-color: #4041424a;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 60px; /* Aligns with the navbar */
+  left: 0;
+  margin-top: 55px;
+  height: calc(100% - 60px); /* Adjusted height to fill the screen */
+  overflow-y: auto;
+}
+
+/* Adjusted button size */
+.nav-button {
+  display: block;
+  width: 100%; /* Full width of the side-nav */
+  padding: 12px; /* Increased padding */
+  margin: 8px 0; /* Increased margin */
+  background-color: #282829;
+  color: white;
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  text-align: left;
+  font-size: 18px; /* Adjusted font size */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+  background-color: #1a1a1ae5;
+}
+
+.circular-progress {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 20px auto;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+}
+
+.progress-ring__background {
+  stroke: #e6e6e6;
+}
+
+.progress-ring__circle {
+  transition: stroke-dashoffset 0.5s ease-out;
+  transform-origin: 50% 50%;
+  stroke-linecap: round; /* Adds rounded ends to the segments */
+}
+
+.progress-text {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #d6181e;
+}
+
+
+
+/* Additional responsiveness for smaller screens */
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .content {
+    width: 100%;
+    margin-left: 0;
+  }
+  .side-nav {
+    position: static;
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+  }
+}
