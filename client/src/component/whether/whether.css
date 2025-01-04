@@ -1,0 +1,129 @@
+
+  /* Tab container for switching between userWeather and searchWeather */
+  .tab-container {
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 70px;
+    border-radius: 8px;
+    padding: 100px;
+  }
+  
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 5px 0;
+    cursor: pointer;
+    font-size: 12px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+  }
+  
+  .tab.current-tab {
+    background-color: #d6181e;
+    color: white;
+  }
+  
+  /* Weather container */
+  .weather-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  /* Location and grant access style */
+  .grant-location-container img {
+    width: 50px;
+    margin-bottom: 10px;
+  }
+  
+  .grant-location-container p {
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
+  
+  .grant-location-container .btn {
+    font-size: 12px;
+    padding: 5px 10px;
+    background-color: #d6181e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Loading animation */
+  .loading-container .loading-image {
+    width: 30px;
+  }
+  
+  .loading-container p {
+    font-size: 12px;
+  }
+  
+  /* User weather information */
+  .user-info-container .name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .user-info-container .name img {
+    width: 24px;
+    height: 18px;
+    margin-left: 5px;
+  }
+  
+  .user-info-container p {
+    font-size: 12px;
+  }
+  
+  .user-info-container img {
+    width: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  /* Parameter container for wind, humidity, cloud */
+  .parameter-container {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .parameter {
+    text-align: center;
+  }
+  
+  .parameter img {
+    width: 20px;
+  }
+  
+  .parameter p {
+    font-size: 10px;
+    margin: 2px 0;
+  }
+  
+  /* Search form */
+  .form-container input {
+    width: 150px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 12px;
+  }
+  
+  .form-container .btn {
+    padding: 5px 8px;
+    background-color: #d6181e;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+  }
+  
+  .form-container img {
+    width: 12px;
+  }
+  

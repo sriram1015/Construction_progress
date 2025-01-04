@@ -3,12 +3,11 @@ const mongoose = require('mongoose');
 const connectDB = async () => {
   try {
     await mongoose.connect('mongodb://localhost:27017/sriramv', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
+      // Removed deprecated options
     });
-    console.log('MongoDB connected');
+    console.log('User MongoDB connected.......📶');
   } catch (err) {
-    console.error('Error connecting to MongoDB:', err);
+    console.error('Error connecting to user MongoDB:', err);
     process.exit(1); // Exit process with failure
   }
 };

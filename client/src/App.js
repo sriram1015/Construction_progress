@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './component/Login';
+import Login from './component/Auth/Login';
 import Register from './component/SignUp';
-import Dashboard from './Pages/Dashboard';
-import Found from './Pages/Foundation';
-import Plint from './Pages/Plinth';
-import Floor from './Pages/Flooring';
-import Linth from './Pages/Lintel';
-import Roof from './Pages/Roofing';
-import Paint from './Pages/painting';
-import Plast from './Pages/Plast';
+import Dashboard from './component/Pages/Dashboard';
+import Found from './component/Pages/Foundation';
+import Plint from './component/Pages/Plinth';
+import Floor from './component/Pages/Flooring';
+import Linth from './component/Pages/Lintel';
+import Roof from './component/Pages/Roofing';
+import Paint from './component/Pages/painting';
+import Plast from './component/Pages/Plast';
 import Home from './component/Home';
-import History from './Pages/Histroy';
+import History from './component/Pages/Histroy';
 import Villpa from './component/Villagepa';
 import Vill from './component/village';
-
+import Admin from './component/Admin/Admin';
+import Adminsignup from './component/Admin/Adminsignup';
+import Admindashboard from './component/Admin/Admindashboard';
+import Whether from './component/whether/Whether';
+import Addrole from './component/Admin/addrole';
 const App = () => {
   const [userData, setUserData] = useState(null);
 
@@ -46,7 +50,12 @@ const App = () => {
         <Route path="/hist" element={<History/>}/>
         <Route path="/vill" element={<Vill/>}/>
         <Route path="/villpa" element={<Villpa/>}/>
+        <Route path="/admin"  element={<Admin/>}/>
+        <Route path='/adminsignup' element={<Adminsignup/>}/>
+        <Route path="/admindashboard" element={<Admindashboard/>}/>
+        <Route path="/whether" element={<Whether/>}/>
         <Route path="/dashboard" element={<Dashboard userData={userData} />} />
+        <Route path="/addrole" element={<Addrole/>}/>
       </Routes>
     </Router>
   );
