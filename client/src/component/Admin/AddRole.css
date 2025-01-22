@@ -1,0 +1,152 @@
+/* AddRole.css */
+
+.add-role-page {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.back-btn:hover {
+    background-color: #0056b3;
+}
+
+.add-role-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.error-msg,
+.success-msg {
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.error-msg {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.success-msg {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.add-role-form input[type="text"],
+.add-role-form select,
+.add-role-form input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.add-role-form input[type="text"]:focus,
+.add-role-form select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+.role-image-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px dashed #007bff;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.role-image-field:hover {
+    background-color: #f0f8ff;
+}
+
+.role-image-field .upload-text {
+    color: #555;
+    font-size: 14px;
+    flex-grow: 1;
+}
+
+.stages-section {
+    padding: 10px;
+    background: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stages-section h3 {
+    margin-bottom: 10px;
+}
+
+.stage-editor {
+    margin-bottom: 15px;
+}
+
+.add-stage-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.add-stage-btn:hover {
+    background-color: #218838;
+}
+
+.assign-users-section {
+    padding: 10px;
+    background: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.assign-users-section h3 {
+    margin-bottom: 10px;
+}
+
+.assign-users-section select {
+    height: 100px;
+}
+
+.submit-role-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.submit-role-btn:hover {
+    background-color: #0056b3;
+}

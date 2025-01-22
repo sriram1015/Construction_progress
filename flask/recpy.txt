@@ -1,0 +1,7 @@
+flask
+tensorflow
+numpy
+opencv-python
+pymongo
+python-dotenv
+flask_cors
