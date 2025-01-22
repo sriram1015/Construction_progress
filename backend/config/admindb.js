@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
-const { Mongoose } = require('mongoose');
+require('dotenv').config();  // Load environment variables from .env file
 
-// Create a new Mongoose instance for the admin DB connection
-const adminDB = new Mongoose();
+// Create a new Mongoose instance for admin DB
+const adminDB = new mongoose.Mongoose();
 
 const connectAdminDB = async () => {
   try {
-    await adminDB.connect('mongodb://localhost:27017/admin', {
-      // Removed deprecated options
-    });
+    const adminDBUri = "mongodb+srv://sriramv:W6FfKrdsrIdfq1Pr@contruction.puvc6.mongodb.net/admins";
+
+    await adminDB.connect(adminDBUri);
+
     console.log('Admin MongoDB connected......📶');
   } catch (err) {
     console.error('Error connecting to admin MongoDB:', err);
