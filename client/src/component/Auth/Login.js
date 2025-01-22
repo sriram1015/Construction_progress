@@ -109,7 +109,7 @@ export default function Login() {
           </div>
 
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ marginBottom: '8px', display: 'block', color: '#495057' }}>Email address</label>
+            <label style={{ marginBottom: '8px', display: 'block', color: '#495057' }}>User Name</label>
             <input
               type="username"
               style={{
@@ -120,7 +120,7 @@ export default function Login() {
                 borderRadius: '4px',
                 boxSizing: 'border-box'
               }}
-              placeholder="Enter email"
+              placeholder="Enter name"
               value={username}
               onChange={(e) => setEmail(e.target.value)}
             />

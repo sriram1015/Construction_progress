@@ -6,8 +6,7 @@ const adminDB = new mongoose.Mongoose();
 
 const connectAdminDB = async () => {
   try {
-    const adminDBUri = "mongodb+srv://sriramv:W6FfKrdsrIdfq1Pr@contruction.puvc6.mongodb.net/admins";
-
+    const adminDBUri = `${process.env.mongo_url}admins`;
     await adminDB.connect(adminDBUri);
 
     console.log('Admin MongoDB connected......📶');

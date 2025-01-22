@@ -3,11 +3,10 @@ require('dotenv').config();
 
 const connectDB = async () => {
   try {
-    // Log the value of MONGO_BASE_URL to ensure it's being loaded properly
-    console.log('MONGO_BASE_URL:', process.env.MONGO_URI);  // Debugging line
     
-    const mongoURI = "mongodb+srv://sriramv:W6FfKrdsrIdfq1Pr@contruction.puvc6.mongodb.net/construction";  
-    console.log('Connecting to MongoDB with URI:', mongoURI);  // Debugging line
+    const mongoURI = `${process.env.mongo_url}construction`;  
+
+    console.log('Connecting to MongoDB with URI:', mongoURI); 
 
     await mongoose.connect(mongoURI);
 

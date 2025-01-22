@@ -17,7 +17,7 @@ model = load_model("cnn_hybrid.h5")
 load_dotenv()
 
 # Get the MongoDB URI from the environment variable
-atlas_connection_string = os.getenv("MONGO_URI")
+atlas_connection_string = os.getenv("mongo_url")
 
 # Initialize MongoDB client with the Atlas connection string
 client = MongoClient(atlas_connection_string)
