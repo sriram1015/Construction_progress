@@ -1,0 +1,12 @@
+npm install concurrently --save-dev
+
+
+forntend 
+cd client
+npm start
+
+backend
+cd backend
+npm install
+npm install express
+
