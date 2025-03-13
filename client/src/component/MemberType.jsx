@@ -5,7 +5,6 @@ const MemberType = () => {
   const navigate = useNavigate();
 
   const handleMemberTypeSelection = (type) => {
-    // Redirect to Login page with member type in state
     navigate('/login', { state: { memberType: type } });
   };
 

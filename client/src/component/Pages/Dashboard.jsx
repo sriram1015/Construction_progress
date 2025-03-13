@@ -8,7 +8,7 @@ import Flooring from './Flooring';
 import Painting from './painting';
 import axios from 'axios';
 import PredictForm from './Foundation';
-import Whether from '../whether/Whether'; // Make sure the path is correct
+import Whether from '../whether/Whether';
 
 function Dashboard() {
   const [selectedComponent, setSelectedComponent] = useState(() => {
@@ -89,80 +89,80 @@ function Dashboard() {
     }
   };
 
- return (
-  <div>
-    <div className="navbar">
-      <h1>DASHBOARD</h1>
-    </div>
-    <div className="container">
-      {/* Left Side Navigation */}
-      <div className="side-nav">
-        {/* Circular Progress Bar */}
-        <div className="circular-progress">
-          <svg className="progress-ring" width="120" height="120">
-            <circle
-              className="progress-ring__background"
-              stroke="#e6e6e6"
-              strokeWidth="10"
-              fill="transparent"
-              r="52"
-              cx="60"
-              cy="60"
-            />
-            <circle
-              className="progress-ring__circle"
-              stroke="#4caf50"
-              strokeWidth="10"
-              fill="transparent"
-              r="52"
-              cx="60"
-              cy="60"
-              style={{
-                strokeDasharray: `${Math.PI * 2 * 52}`,
-                strokeDashoffset: `${Math.PI * 2 * 52 * (1 - totalProgression / 100)}`,
-              }}
-            />
-          </svg>
-          {/* Display Total Progression Percentage in the Center */}
-          <div className="progress-text">
-            <strong>{totalProgression.toFixed(2)}%</strong>
+  return (
+    <div>
+      <div className="navbar">
+        <h1>DASHBOARD</h1>
+      </div>
+      <div className="container">
+        {/* Left Side Navigation */}
+        <div className="side-nav">
+          {/* Circular Progress Bar */}
+          <div className="circular-progress">
+            <svg className="progress-ring" width="120" height="120">
+              <circle
+                className="progress-ring__background"
+                stroke="#e6e6e6"
+                strokeWidth="10"
+                fill="transparent"
+                r="52"
+                cx="60"
+                cy="60"
+              />
+              <circle
+                className="progress-ring__circle"
+                stroke="#4caf50"
+                strokeWidth="10"
+                fill="transparent"
+                r="52"
+                cx="60"
+                cy="60"
+                style={{
+                  strokeDasharray: `${Math.PI * 2 * 52}`,
+                  strokeDashoffset: `${Math.PI * 2 * 52 * (1 - totalProgression / 100)}`,
+                }}
+              />
+            </svg>
+            {/* Display Total Progression Percentage in the Center */}
+            <div className="progress-text">
+              <strong>{totalProgression.toFixed(2)}%</strong>
+            </div>
           </div>
+
+          {/* Navigation Buttons */}
+          <button className="nav-button" onClick={() => setSelectedComponent('Foundation')}>
+            Foundation {predictions.Foundation !== null && `(${predictions.Foundation}%)`}
+          </button>
+          <button className="nav-button" onClick={() => setSelectedComponent('PlinthBeam')}>
+            PlinthBeam {predictions.PlinthBeam !== null && `(${predictions.PlinthBeam}%)`}
+          </button>
+          <button className="nav-button" onClick={() => setSelectedComponent('Lintel')}>
+            Lintel {predictions.Lintel !== null && `(${predictions.Lintel}%)`}
+          </button>
+          <button className="nav-button" onClick={() => setSelectedComponent('Roofing')}>
+            Roofing {predictions.Roofing !== null && `(${predictions.Roofing}%)`}
+          </button>
+          <button className="nav-button" onClick={() => setSelectedComponent('Plastering')}>
+            Plastering {predictions.Plastering !== null && `(${predictions.Plastering}%)`}
+          </button>
+          <button className="nav-button" onClick={() => setSelectedComponent('Flooring')}>
+            Flooring {predictions.Flooring !== null && `(${predictions.Flooring}%)`}
+          </button>
+          <button className="nav-button" onClick={() => setSelectedComponent('Painting')}>
+            Painting {predictions.Painting !== null && `(${predictions.Painting}%)`}
+          </button>
+
+        </div>
+        <div className="whether">
+          <Whether />
         </div>
 
-        {/* Navigation Buttons */}
-        <button className="nav-button" onClick={() => setSelectedComponent('Foundation')}>
-          Foundation {predictions.Foundation !== null && `(${predictions.Foundation}%)`}
-        </button>
-        <button className="nav-button" onClick={() => setSelectedComponent('PlinthBeam')}>
-          PlinthBeam {predictions.PlinthBeam !== null && `(${predictions.PlinthBeam}%)`}
-        </button>
-        <button className="nav-button" onClick={() => setSelectedComponent('Lintel')}>
-          Lintel {predictions.Lintel !== null && `(${predictions.Lintel}%)`}
-        </button>
-        <button className="nav-button" onClick={() => setSelectedComponent('Roofing')}>
-          Roofing {predictions.Roofing !== null && `(${predictions.Roofing}%)`}
-        </button>
-        <button className="nav-button" onClick={() => setSelectedComponent('Plastering')}>
-          Plastering {predictions.Plastering !== null && `(${predictions.Plastering}%)`}
-        </button>
-        <button className="nav-button" onClick={() => setSelectedComponent('Flooring')}>
-          Flooring {predictions.Flooring !== null && `(${predictions.Flooring}%)`}
-        </button>
-        <button className="nav-button" onClick={() => setSelectedComponent('Painting')}>
-          Painting {predictions.Painting !== null && `(${predictions.Painting}%)`}
-        </button>
-
-        {/* Weather Component Below Progression Rate */}
-       
-      </div>
-
-      {/* Main Content based on selected component */}
-      <div className="content">
-        {renderComponent()}
+        <div className="content">
+          {renderComponent()}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
 
 }
 

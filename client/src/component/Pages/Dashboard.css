@@ -60,9 +60,16 @@
   background-color: #1a1a1ae5;
 }
 
-.weather-app-wrapper {
-  margin-top: 20px; /* Adds spacing between the Predict button and the weather widget */
-  width: 100%; /* Ensures the widget fits nicely */
+.whether {
+  position: fixed;
+  right: 20px;  
+  top: 50%;
+  transform: translateY(-50%); 
+  width: 200px; 
+  background: white; 
+  padding: 10px; 
+  border-radius: 8px; 
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
 }
 
 .circular-progress {

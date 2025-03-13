@@ -5,11 +5,9 @@ const MemberType = () => {
   const navigate = useNavigate();
 
   const handleMemberTypeSelection = () => {
-    // Redirect to the Login page with member type in state
     navigate('/villpa');
   };
 
-  // Inline CSS for the container, heading, and buttons
   const containerStyle = {
     display: 'flex',
     flexDirection: 'column',

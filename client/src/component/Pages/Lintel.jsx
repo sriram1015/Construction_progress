@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './PredictForm.css';
 
@@ -58,7 +58,7 @@ function PredictForm({ onPredictionUpdate }) {
       const { prediction_text, similarity } = res.data;
       const constructionStage = prediction_text.replace('The classified construction stage is: ', '');
 
-      if (constructionStage==='Lintel') {
+      if (constructionStage === 'Lintel') {
         setPrediction(constructionStage);
         setSimilarity(similarity);
 
@@ -106,7 +106,8 @@ function PredictForm({ onPredictionUpdate }) {
 
       <div className="predict-form-container">
         <h1>Lintel</h1>
-        <input type="file" onChange={onFileChange} accept="image/*" />
+        <input type="file" id="fileInput" onChange={onFileChange} accept="image/*" />
+        <label htmlFor="fileInput" className="upload-button">Upload Image</label>
         {preview && (
           <div>
             <h3>Image Preview:</h3>

@@ -19,7 +19,7 @@ export default function Login() {
     e.preventDefault();
 
     // Normalize email to lowercase
-    const normalizedEmail = username.toLowerCase(); 
+    const normalizedEmail = username.toLowerCase();
 
     console.log("Email:", normalizedEmail);
     console.log("Password:", password);
@@ -29,7 +29,7 @@ export default function Login() {
       const response = await axios.post(`${apiUrl}/auth/login`, {
         username,
         password,
-        memberType, // This should be handled on the backend if necessary
+        memberType, 
       });
 
       if (response.data.status === "ok") {
@@ -65,18 +65,18 @@ export default function Login() {
         <form onSubmit={handleSubmit}>
           <h1 style={{ textAlign: 'center', marginBottom: '24px', color: '#343a40' }}>Login</h1>
           <h3 style={{ marginBottom: '16px', color: '#343a40' }}>
-            Login As:   
-            <button 
-              onClick={handleAdmin} 
-              style={{ 
-                background: 'none', 
-                border: 'none', 
-                color: 'red', 
-                textDecoration: 'underline', 
-                cursor: 'pointer', 
-                fontSize: '16px', 
-                padding: '0', 
-                fontWeight: 'bold' 
+            Login As:
+            <button
+              onClick={handleAdmin}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'red',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+                fontSize: '16px',
+                padding: '0',
+                fontWeight: 'bold'
               }}
             >
               Admin?
@@ -84,28 +84,28 @@ export default function Login() {
           </h3>
           <div style={{ marginBottom: '16px' }}>
             <label style={{ marginBottom: '8px', display: 'block', color: '#495057' }}>Select MemberType</label>
-          <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: '16px' }}>
-            <div style={{ flex: '1 1 100%', marginBottom: '8px' }}>
-              <select 
-                value={memberType} 
-                onChange={(e) => setMemberType(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  fontSize: '16px',
-                  border: '1px solid #ced4da',
-                  borderRadius: '4px',
-                  boxSizing: 'border-box'
-                }}
-              >
-                <option value="" disabled>Select Role</option>
-                <option value="JuniorEngineer">JuniorEngineer</option>
-                <option value="assistantengineer">AssistantEngineer</option>
-                <option value="executiveengineer">ExecutiveEngineer</option>
-                <option value="chiefengineer">ChiefEngineer</option>
-              </select>
+            <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: '16px' }}>
+              <div style={{ flex: '1 1 100%', marginBottom: '8px' }}>
+                <select
+                  value={memberType}
+                  onChange={(e) => setMemberType(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    fontSize: '16px',
+                    border: '1px solid #ced4da',
+                    borderRadius: '4px',
+                    boxSizing: 'border-box'
+                  }}
+                >
+                  <option value="" disabled>Select Role</option>
+                  <option value="JuniorEngineer">JuniorEngineer</option>
+                  <option value="assistantengineer">AssistantEngineer</option>
+                  <option value="executiveengineer">ExecutiveEngineer</option>
+                  <option value="chiefengineer">ChiefEngineer</option>
+                </select>
+              </div>
             </div>
-          </div>
           </div>
 
           <div style={{ marginBottom: '16px' }}>
@@ -145,8 +145,8 @@ export default function Login() {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr' }}>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               style={{
                 backgroundColor: '#007bff',
                 borderColor: '#007bff',

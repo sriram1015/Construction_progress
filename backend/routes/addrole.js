@@ -8,7 +8,7 @@ const Role = mongoose.model('Role', new mongoose.Schema({
     title: { type: String, required: true },
     image: { type: String, required: false },
     stageContent: { type: Object, required: true },
-    assignedUser: { type: String, required: true }, // Changed to store username
+    assignedUser: { type: String, required: true }, 
 }));
 
 // Middleware for file uploads

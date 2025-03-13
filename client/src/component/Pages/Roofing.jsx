@@ -105,8 +105,8 @@ function PredictForm({ onPredictionUpdate }) {
       </div>
 
       <div className="predict-form-container">
-        <h1>Roofing</h1>
-        <input type="file" onChange={onFileChange} accept="image/*" />
+        <input type="file" id="fileInput" onChange={onFileChange} accept="image/*" />
+        <label htmlFor="fileInput" className="upload-button">Upload Image</label>
         {preview && (
           <div>
             <h3>Image Preview:</h3>

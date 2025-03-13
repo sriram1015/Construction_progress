@@ -1,6 +1,6 @@
 /* Style for the navigation bar */
 .navbar {
-    background-color:#e9eef34a;
+    background-color: #e9eef34a;
     padding: 20px;
     border-radius: 0 0 8px 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -45,11 +45,11 @@
 
 /* Content section styling to avoid overlap with fixed navbar */
 .content {
-    padding-top: 100px; /* Adjust padding to match navbar height */
+    padding-top: 100px;
     text-align: center;
     background-color: rgba(255, 255, 255, 0);
     padding: 20px;
-    gap:20px;
+    gap: 20px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -57,9 +57,10 @@
     justify-content: center;
 }
 
-.content h1{
-    color:#f0e8e8;
+.content h1 {
+    color: #f0e8e8;
 }
+
 /* Style for the content list */
 .content li {
     list-style: none;

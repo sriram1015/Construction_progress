@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './PredictForm.css';
-import Whether from "../whether/Whether"; // Corrected import name
 
 function PredictForm({ onPredictionUpdate }) {
   const [file, setFile] = useState(null);
@@ -93,9 +92,6 @@ function PredictForm({ onPredictionUpdate }) {
 
   return (
     <div className="main-container">
-      <div className="whether">
-          <Whether /> {/* Use the component here */}
-        </div>
       <div className="todo-list">
         <h2>Progression Rate:</h2>
         <ul>
@@ -107,18 +103,21 @@ function PredictForm({ onPredictionUpdate }) {
             </li>
           ))}
         </ul>
-        
+
       </div>
 
       <div className="predict-form-container">
         <h1>Foundation</h1>
-        <input type="file" onChange={onFileChange} accept="image/*" />
+        <input type="file" id="fileInput" onChange={onFileChange} accept="image/*" />
+        <label htmlFor="fileInput" className="upload-button">Upload Image</label>
+
         {preview && (
           <div>
             <h3>Image Preview:</h3>
             <img src={preview} alt="Selected file preview" className="preview-image" />
           </div>
         )}
+
         <button onClick={onPredict} className="predict-button">Predict</button>
         {prediction && similarity !== null && (
           <div>

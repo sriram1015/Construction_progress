@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const apiUrl = 'http://localhost:5001';
-
+import './admindashboard.css';
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
@@ -10,7 +10,7 @@ const AdminDashboard = () => {
   const [editUser, setEditUser] = useState(null); // For editing user details
   const [newUser, setNewUser] = useState({ username: '', email: '', password: '', memberType: '' });
   const navigate = useNavigate();
-  
+
   // Fetch users from the backend
   useEffect(() => {
     const fetchUsers = async () => {
@@ -51,7 +51,7 @@ const AdminDashboard = () => {
     try {
       console.log('Updating user:', editUser); // Log user data being sent
       const response = await axios.put(`http://localhost:5001/auth/update-user/${userId}`, editUser);
-      
+
       console.log('Update response:', response.data); // Log backend response
       if (response.data.status === 'ok') {
         setMessage('User updated successfully.');
@@ -65,7 +65,7 @@ const AdminDashboard = () => {
       setError('An error occurred while updating user');
     }
   };
-  
+
   // Add new user
   const addUser = async () => {
     try {
@@ -83,16 +83,16 @@ const AdminDashboard = () => {
     }
   };
 
-  const addrole = async()=>{
+  const addrole = async () => {
     navigate('/addrole');
   }
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="admin-dashboard">
       <h2>Admin Dashboard</h2>
 
       {/* Display error or success message */}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {message && <p style={{ color: 'green' }}>{message}</p>}
+      {error && <p className="error-msg">{error}</p>}
+      {message && <p className="success-msg">{message}</p>}
 
       {/* Users Table */}
       {!error && users.length > 0 ? (
@@ -110,37 +110,43 @@ const AdminDashboard = () => {
             {users.map((user, index) => (
               <tr key={user._id}>
                 <td>{index + 1}</td>
-                <td>{editUser && editUser._id === user._id ? (
-                  <input 
-                    type="text" 
-                    value={editUser.username} 
-                    onChange={(e) => setEditUser({ ...editUser, username: e.target.value })}
-                  />
-                ) : user.username}</td>
-                <td>{editUser && editUser._id === user._id ? (
-                  <input 
-                    type="email" 
-                    value={editUser.email} 
-                    onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
-                  />
-                ) : user.email}</td>
-                <td>{editUser && editUser._id === user._id ? (
-                  <input 
-                    type="text" 
-                    value={editUser.memberType} 
-                    onChange={(e) => setEditUser({ ...editUser, memberType: e.target.value })}
-                  />
-                ) : user.memberType}</td>
+                <td>
+                  {editUser && editUser._id === user._id ? (
+                    <input
+                      type="text"
+                      value={editUser.username}
+                      onChange={(e) => setEditUser({ ...editUser, username: e.target.value })}
+                    />
+                  ) : user.username}
+                </td>
+                <td>
+                  {editUser && editUser._id === user._id ? (
+                    <input
+                      type="email"
+                      value={editUser.email}
+                      onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
+                    />
+                  ) : user.email}
+                </td>
+                <td>
+                  {editUser && editUser._id === user._id ? (
+                    <input
+                      type="text"
+                      value={editUser.memberType}
+                      onChange={(e) => setEditUser({ ...editUser, memberType: e.target.value })}
+                    />
+                  ) : user.memberType}
+                </td>
                 <td>
                   {editUser && editUser._id === user._id ? (
                     <>
-                      <button onClick={() => updateUser(user._id)}>Save</button>
-                      <button onClick={() => setEditUser(null)}>Cancel</button>
+                      <button className="save-btn" onClick={() => updateUser(user._id)}>Save</button>
+                      <button className="cancel-btn" onClick={() => setEditUser(null)}>Cancel</button>
                     </>
                   ) : (
                     <>
-                      <button onClick={() => setEditUser(user)}>Edit</button>
-                      <button onClick={() => deleteUser(user._id)} style={{ backgroundColor: 'red', color: 'white' }}>Delete</button>
+                      <button className="edit-btn" onClick={() => setEditUser(user)}>Edit</button>
+                      <button className="delete-btn" onClick={() => deleteUser(user._id)}>Delete</button>
                     </>
                   )}
                 </td>
@@ -152,44 +158,41 @@ const AdminDashboard = () => {
         <p>No users found.</p>
       )}
 
-      {/* Add New User Form at the Bottom */}
-      <div style={{ marginTop: '20px' }}>
+      {/* Add New User Form */}
+      <div className="add-user-form">
         <h3>Add New User</h3>
-        <input 
-          type="text" 
-          placeholder="Username" 
-          value={newUser.username} 
-          onChange={(e) => setNewUser({ ...newUser, username: e.target.value })} 
+        <input
+          type="text"
+          placeholder="Username"
+          value={newUser.username}
+          onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
         />
-        <input 
-          type="email" 
-          placeholder="Email" 
-          value={newUser.email} 
-          onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} 
+        <input
+          type="email"
+          placeholder="Email"
+          value={newUser.email}
+          onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
         />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          value={newUser.password} 
-          onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} 
+        <input
+          type="password"
+          placeholder="Password"
+          value={newUser.password}
+          onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
         />
-        
-        {/* Dropdown for Role */}
-        <select 
-          value={newUser.memberType} 
+        <select
+          value={newUser.memberType}
           onChange={(e) => setNewUser({ ...newUser, memberType: e.target.value })}
         >
-           <option value="" disabled>Select Role</option>
-            <option value="JuniorEngineer">JuniorEngineer</option>
-            <option value="AssistantEngineer">AssistantEngineer</option>
-            <option value="ExecutiveEngineer">ExecutiveEngineer</option>
-            <option value="ChiefEngineer">ChiefEngineer</option>
+          <option value="" disabled>Select Role</option>
+          <option value="JuniorEngineer">Junior Engineer</option>
+          <option value="AssistantEngineer">Assistant Engineer</option>
+          <option value="ExecutiveEngineer">Executive Engineer</option>
+          <option value="ChiefEngineer">Chief Engineer</option>
         </select>
-
         <button onClick={addUser}>Add User</button>
       </div>
-      <div>        <button onClick={addrole}>ADDROLES</button>
-      </div>
+
+      <button className="add-role-btn" onClick={addrole}>Assign Project</button>
     </div>
   );
 };

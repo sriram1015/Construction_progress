@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
+import { AiOutlineUpload } from 'react-icons/ai';
+import { FiArrowLeft } from 'react-icons/fi';
 import './AddRole.css';
 
 const apiUrl = 'http://localhost:5001';
@@ -77,6 +81,17 @@ const AddRole = () => {
             setIsLoading(false);
         }
     };
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                setImage(event.target.result); // Store image preview as a data URL
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
 
     useEffect(() => {
         fetchUsers();
@@ -101,17 +116,27 @@ const AddRole = () => {
                     aria-label="Role Title"
                 />
 
-                <div className="role-image-field">
-                    <AiOutlineUpload />
-                    <div className="upload-text">
-                        {image ? image.name : 'Upload a relevant image for this role.'}
+                <div className="upload-container">
+                    {/* Upload Button Section */}
+                    <div className="role-image-field" onClick={() => document.getElementById("imageInput").click()}>
+                        <AiOutlineUpload size={100} color="#007bff" />
+                        <div className="upload-text">Upload a relevant image for this role.</div>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            id="imageInput"
+                            onChange={handleImageChange}
+                            hidden
+                            aria-label="Upload Image"
+                        />
                     </div>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setImage(e.target.files[0])}
-                        aria-label="Upload Image"
-                    />
+
+                    {/* Image Preview Section (Separate) */}
+                    {image && (
+                        <div className="image-preview-container">
+                            <img src={image} alt="Uploaded Preview" className="role-image-preview" />
+                        </div>
+                    )}
                 </div>
 
                 <div className="stages-section">
@@ -139,7 +164,7 @@ const AddRole = () => {
                 </div>
 
                 <div className="assign-users-section">
-                    <h3>Assign to User</h3>
+                    <h3>Assign to Engineer</h3>
                     {isLoading ? (
                         <p>Loading users...</p>
                     ) : (
