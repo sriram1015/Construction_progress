@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const connectDB = require('./config/db'); // Regular user DB connection
-const { connectAdminDB } = require('./config/admindb'); // Admin DB connection
+//const { connectAdminDB } = require('./config/admindb'); // Admin DB connection
 const authRoutes = require('./routes/auth');
 const addrole = require('./routes/addrole');
 
@@ -15,7 +15,7 @@ app.use(cors());
 
 // Connect to both databases
 connectDB(); // For regular users
-connectAdminDB(); // For admin users
+//connectAdminDB(); // For admin users
 
 
 // Use authentication routes

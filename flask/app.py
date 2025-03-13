@@ -44,7 +44,7 @@ def predict():
         f.save(filepath)
 
         # Resize the image to the input shape expected by the model
-        img = image.load_img(filepath, target_size=(100, 100))  # Adjust target size to your model's input size
+        img = image.load_img(filepath, target_size=(100, 100))  
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
 
