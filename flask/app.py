@@ -11,30 +11,24 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# Load your trained model
 model = load_model("cnn_hybrid.h5")
 
 load_dotenv()
 
-# Get the MongoDB URI from the environment variable
 atlas_connection_string = os.getenv("mongo_url")
 
-# Initialize MongoDB client with the Atlas connection string
 client = MongoClient(atlas_connection_string)
 
-# Access the database and collection
 db = client['construction']
 collection = db['prediction']
 
 
-# Ensure 'uploads' directory exists
 if not os.path.exists('uploads'):
     os.makedirs('uploads')
 
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Get the uploaded image from the form
         f = request.files.get('image')
         if not f:
             return jsonify({'error': 'No file uploaded'}), 400
@@ -43,21 +37,17 @@ def predict():
         filepath = os.path.join(basepath, 'uploads', f.filename)
         f.save(filepath)
 
-        # Resize the image to the input shape expected by the model
         img = image.load_img(filepath, target_size=(100, 100))  
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
 
-        # Predict the class using the model
         y = model.predict(x)
         preds = np.argmax(y, axis=1)
 
-        # Construction stage mapping
         stages = ['Foundation', 'Plinth and building', 'Lintel', 'Roofing', 'Plastering', 'Flooring', 'Painting']
         predicted_stage = stages[preds[0]]
         last_record = collection.find_one({'prediction': predicted_stage }, sort=[('_id', -1)])
         if last_record:
-            # Construct the full path for the last uploaded image
             filepath1 = os.path.join(basepath, 'uploads', last_record['filename'])
             percent = similarity(preds[0], filepath1, filepath)
             percent=percent+last_record['similarity']

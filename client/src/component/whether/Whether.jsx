@@ -4,12 +4,13 @@ import cloud from "../assets/cloud.png";
 import humidity from "../assets/humidity.png";
 import wind from "../assets/wind.png";
 import search from "../assets/search.png";
-import not_found from "../assets/not-found.png";
 import location from "../assets/location.png";
 import loadingimg from "../assets/loading.gif";
 import "./whether.css";
 
-const API_KEY = "d1845658f92b31c64bd94f06f7188c9c";
+const API_KEY = import.meta.env.VITE_API_KEY; 
+const node_url = import.meta.env.VITE_NODE_URL;
+
 
 const Weatherapp = () => {
   const [oldTab, setOldTab] = useState("userWeather");
@@ -21,14 +22,6 @@ const Weatherapp = () => {
     getFromSessionStorage();
   }, []);
 
-  const switchTab = (newTab) => {
-    if (newTab !== oldTab) {
-      setOldTab(newTab);
-      if (newTab === "userWeather") {
-        getFromSessionStorage();
-      }
-    }
-  };
 
   const getFromSessionStorage = () => {
     const localCoordinates = sessionStorage.getItem("user-coordinates");
@@ -49,7 +42,7 @@ const Weatherapp = () => {
       console.log(response.data); // Print weather data in cmd
 
       // Send the weather data to Node.js backend for saving to .txt and MongoDB
-      await axios.post("http://localhost:5000/saveWeatherData", response.data);
+      await axios.post(`${node_url}/saveWeatherData`, response.data);
     } catch (err) {
       console.error(err);
     }
@@ -66,7 +59,7 @@ const Weatherapp = () => {
       console.log(response.data); // Print weather data in cmd
 
       // Send the weather data to Node.js backend for saving to .txt and MongoDB
-      await axios.post("http://localhost:5000/saveWeatherData", response.data);
+      await axios.post(`${node_url}/saveWeatherData`, response.data);
     } catch (err) {
       console.error(err);
     }

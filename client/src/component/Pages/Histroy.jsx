@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './History.css';
 
+const node_url = import.meta.env.VITE_NODE_URL;
+const flask_url = import.meta.env.VITE_FLASK_URL;
+
 function HistoryPage() {
   const [history, setHistory] = useState([]);
 
@@ -9,6 +12,17 @@ function HistoryPage() {
     setHistory(savedHistory);
   }, []);
 
+  // // change that to fetch from backend
+  // const fetchHistory = async () => {
+  //   try {
+  //     const response = await fetch(`${Backend_url}/history`); // Replace with your backend endpoint
+  //     const data = await response.json();
+  //     setHistory(data);
+  //   } catch (error) {
+  //     console.error('Error fetching history:', error);
+  //   }
+  // };
+  
   return (
     <div className="history-page">
       <h1>Prediction History</h1>

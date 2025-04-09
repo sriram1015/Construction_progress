@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './PredictForm.css';
 
+const flask_url = import.meta.env.VITE_FLASK_URL;
+
 function PredictForm({ onPredictionUpdate }) {
   const [file, setFile] = useState(null);
   const [prediction, setPrediction] = useState(() => {
@@ -49,7 +51,7 @@ function PredictForm({ onPredictionUpdate }) {
     formData.append('image', file);
 
     try {
-      const res = await axios.post('http://127.0.0.1:5000/predict', formData, {
+      const res = await axios.post(`${flask_url}/predict`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -73,7 +75,7 @@ function PredictForm({ onPredictionUpdate }) {
         // Update the Dashboard predictions
         onPredictionUpdate(constructionStage, similarity);
       } else {
-        await axios.post('http://127.0.0.1:5000/delete', { message: -1 });
+        await axios.post(`${flask_url}/delete`, { message: -1 });
         alert('The image is incorrect');
       }
     } catch (error) {

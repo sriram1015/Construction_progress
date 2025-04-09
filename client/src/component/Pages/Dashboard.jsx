@@ -10,6 +10,8 @@ import axios from 'axios';
 import PredictForm from './Foundation';
 import Whether from '../whether/Whether';
 
+const flask_url = import.meta.env.VITE_FLASK_URL;
+
 function Dashboard() {
   const [selectedComponent, setSelectedComponent] = useState(() => {
     return localStorage.getItem('selectedComponent') || null;
@@ -33,7 +35,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchPredictions = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/predictions');
+        const response = await axios.get(`${flask_url}/predictions`);
         const data = response.data;
         setPredictions(data);
         calculateTotalProgression(data);

@@ -6,7 +6,7 @@ import { AiOutlineUpload } from 'react-icons/ai';
 import { FiArrowLeft } from 'react-icons/fi';
 import './AddRole.css';
 
-const apiUrl = 'http://localhost:5001';
+const node_url = import.meta.env.VITE_NODE_URL;
 
 const AddRole = () => {
     const editorEl = useRef(null);
@@ -45,7 +45,7 @@ const AddRole = () => {
         formData.append('assignedUser', assignedUser);
 
         try {
-            const { data } = await axios.post(`${apiUrl}/add/role/addrole`, formData);
+            const { data } = await axios.post(`${node_url}/add/role/addrole`, formData);
             setSuccess('Role added successfully!');
             clearInputs();
             setTimeout(() => setSuccess(''), 7000);
@@ -72,7 +72,7 @@ const AddRole = () => {
     const fetchUsers = async () => {
         setIsLoading(true);
         try {
-            const { data } = await axios.get(`${apiUrl}/add/use1`);
+            const { data } = await axios.get(`${node_url}/add/use1`);
             setAllUsers(data);
         } catch (err) {
             console.error('Error fetching users:', err);

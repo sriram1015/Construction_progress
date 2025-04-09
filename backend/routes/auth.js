@@ -4,45 +4,6 @@ const router = express.Router();
 const User = require('../models/user');
 const Admin = require('../models/admin');
 
-// Registration route
-router.post('/register', async (req, res) => {
-  const { username, email, password, memberType, secretKey } = req.body;
-  console.log(`✅Attempting registration for email: ${email}, memberType: ${memberType}`);
-  
-  try {
-    // Check secret key for district users
-    if (memberType === 'districtuser' && secretKey !== 'AdarshT') {
-      console.log('❗❗Invalid secret key provided.');
-      return res.status(400).json({ status: 'error', message: 'Invalid Secret Key' });
-    }
-
-    // Check if user already exists
-    const existingUser = await User.findOne({ email, memberType });
-    if (existingUser) {
-      console.log('User already exists.❗❗');
-      return res.status(400).json({ status: 'error', message: 'User already exists' });
-    }
-
-    // Hash password before saving
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = new User({
-      username,
-      email,
-      password: hashedPassword,
-      memberType
-    });
-
-    await newUser.save();
-    console.log('User registered successfully.✅');
-    res.json({ status: 'ok', message: 'Registration successful' });
-  } catch (error) {
-    console.error('❗❗Error during registration:', error);
-    res.status(500).json({ status: 'error', message: 'An error occurred during registration. Please try again later.' });
-  }
-});
-
-
 
 // Admin Registration route
 router.post('/adminregister', async (req, res) => {
@@ -181,10 +142,6 @@ router.put('/update-user/:id', async (req, res) => {
     res.status(500).json({ status: 'error', message: 'Failed to update user' });
   }
 });
-
-
-
-
 
 
 module.exports = router;

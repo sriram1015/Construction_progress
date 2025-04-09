@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import './SignUp.css';
 
+const node_url = import.meta.env.VITE_NODE_URL;
+const flask_url = import.meta.env.VITE_FLASK_URL;
+
 export default function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -15,7 +18,7 @@ export default function SignUp() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5001/auth/register", {
+      const response = await axios.post(`${node_url}/auth/register`, {
         username,
         email,
         password,

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';  // Import useNavigate hook
-const apiUrl = 'http://localhost:5001';
+import { useNavigate } from 'react-router-dom';  
+
+const node_url = import.meta.env.VITE_NODE_URL;
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +11,7 @@ const AdminLogin = () => {
   });
 
   const [message, setMessage] = useState('');
-  const navigate = useNavigate();  // Initialize useNavigate hook
+  const navigate = useNavigate();
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -25,11 +26,10 @@ const AdminLogin = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${apiUrl}/auth/adminlogin`, formData);
+      const response = await axios.post(`${node_url}/auth/adminlogin`, formData);
       setMessage(response.data.message);
 
       if (response.data.status === 'ok') {
-        // Redirect to the dashboard upon successful login
         navigate('/admindashboard');
         console.log('Admin login successful');
       }
@@ -42,18 +42,68 @@ const AdminLogin = () => {
     }
   };
 
+  // CSS Styles
+  const styles = {
+    container: {
+      margin: '0 auto',
+      maxWidth: '400px',
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      border: '1px solid #ccc',
+      padding: '20px',
+      borderRadius: '8px',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+      backgroundColor: '#fff'
+    },
+    heading: {
+      textAlign: 'center',
+      marginBottom: '20px'
+    },
+    form: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '15px',
+      alignItems: 'center'
+      
+    },
+    input: {
+      padding: '10px 40px',
+      border: '1px solid black',
+      borderRadius: '5px',
+      outline: 'none',
+      margin: '10px',
+      
+    },
+    button: {
+      padding: '10px',
+      backgroundColor: '#007bff',
+      color: 'white',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer'
+    },
+    message: {
+      textAlign: 'center',
+      marginTop: '10px',
+      color: 'red' // Adjust color for error messages
+    }
+  };
+
   return (
-    <div style={{ margin: '0 auto', maxWidth: '400px', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-      <h2>Admin Login</h2>
-      <form onSubmit={handleSubmit} style={{ gap: '10px' }}>
+    <div style={styles.container}>
+      <h2 style={styles.heading}>Admin Login</h2>
+      <form onSubmit={handleSubmit} style={styles.form}>
         <div>
-          <label>Email:</label>
+          <label> Email: </label>&nbsp;&nbsp;
           <input
             type="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
             required
+            style={styles.input}
           />
         </div>
         <div>
@@ -64,13 +114,14 @@ const AdminLogin = () => {
             value={formData.password}
             onChange={handleChange}
             required
+            style={styles.input}
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" style={styles.button}>Login</button>
       </form>
 
       {/* Display the response message */}
-      {message && <p>{message}</p>}
+      {message && <p style={styles.message}>{message}</p>}
     </div>
   );
 };

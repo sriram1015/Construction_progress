@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-const apiUrl = 'http://localhost:5001';
+
+const node_url = import.meta.env.VITE_NODE_URL;
+
+
 import './admindashboard.css';
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
@@ -15,7 +18,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${apiUrl}/auth/all-users`);
+        const response = await axios.get(`${node_url}/auth/all-users`);
         if (response.data.status === 'ok') {
           setUsers(response.data.users);
         } else {
@@ -33,7 +36,7 @@ const AdminDashboard = () => {
   // Delete user by ID
   const deleteUser = async (userId) => {
     try {
-      const response = await axios.delete(`http://localhost:5001/auth/delete-user/${userId}`);
+      const response = await axios.delete(`${node_url}/auth/delete-user/${userId}`);
       if (response.data.status === 'ok') {
         setMessage('User deleted successfully.');
         setUsers(users.filter(user => user._id !== userId)); // Remove the deleted user from state
@@ -50,7 +53,7 @@ const AdminDashboard = () => {
   const updateUser = async (userId) => {
     try {
       console.log('Updating user:', editUser); // Log user data being sent
-      const response = await axios.put(`http://localhost:5001/auth/update-user/${userId}`, editUser);
+      const response = await axios.put(`${node_url}/auth/update-user/${userId}`, editUser);
 
       console.log('Update response:', response.data); // Log backend response
       if (response.data.status === 'ok') {
@@ -69,7 +72,7 @@ const AdminDashboard = () => {
   // Add new user
   const addUser = async () => {
     try {
-      const response = await axios.post('http://localhost:5001/auth/register', newUser);
+      const response = await axios.post(`${node_url}/auth/register`, newUser);
       if (response.data.status === 'ok') {
         setMessage('User added successfully.');
         setUsers([...users, response.data.newUser]); // Add new user to the users array
