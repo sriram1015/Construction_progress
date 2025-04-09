@@ -37,7 +37,7 @@ export default function Login() {
         if (memberType === "assistantengineer") {
           navigate("/vill");
         } else {
-          navigate("/dashboard");
+          navigate("/stage");
         }
       } else {
         alert(`Error: ${response.data.message}`);

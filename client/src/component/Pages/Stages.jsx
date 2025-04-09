@@ -1,23 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './PredictForm.css';
+//import './PredictForm.css';
+import './Stage.css';
 
 const flask_url = import.meta.env.VITE_FLASK_URL;
 
-function PredictForm({ onPredictionUpdate }) {
+const stagesData = [
+  { id: 'Foundation', title: 'Foundation' },
+  { id: 'Flooring', title: 'Flooring' },
+  { id: 'PlinthBeam', title: 'Plinth Beam' },
+  { id: 'Lintel', title: 'Lintel' },
+  { id: 'Roofing', title: 'Roofing' },
+  { id: 'Plastering', title: 'Plastering' },
+  { id: 'Painting', title: 'Painting' },
+];
+
+function Stages() {
+  const [selectedStage, setSelectedStage] = useState('Foundation');
   const [file, setFile] = useState(null);
-  const [prediction, setPrediction] = useState(() => {
-    return sessionStorage.getItem('prediction') || null;
-  });
-  const [similarity, setSimilarity] = useState(() => {
-    return sessionStorage.getItem('similarity') || null;
-  });
-  const [preview, setPreview] = useState(() => {
-    return sessionStorage.getItem('preview') || null;
-  });
+  const [prediction, setPrediction] = useState(() => sessionStorage.getItem('prediction') || null);
+  const [similarity, setSimilarity] = useState(() => sessionStorage.getItem('similarity') || null);
+  const [preview, setPreview] = useState(() => sessionStorage.getItem('preview') || null);
   const [tasks, setTasks] = useState(() => {
-    const savedTask = sessionStorage.getItem('tasks');
-    return savedTask ? JSON.parse(savedTask) : [];
+    const savedTasks = sessionStorage.getItem('tasks');
+    return savedTasks ? JSON.parse(savedTasks) : [];
   });
   const [modalImage, setModalImage] = useState(null);
 
@@ -25,7 +31,7 @@ function PredictForm({ onPredictionUpdate }) {
     sessionStorage.setItem('prediction', prediction);
     sessionStorage.setItem('similarity', similarity);
     sessionStorage.setItem('preview', preview);
-    sessionStorage.setItem('tasks', JSON.stringify(tasks));  // Use JSON.stringify instead of Json.stringify
+    sessionStorage.setItem('tasks', JSON.stringify(tasks));
   }, [prediction, similarity, preview, tasks]);
 
   const onFileChange = (e) => {
@@ -60,20 +66,17 @@ function PredictForm({ onPredictionUpdate }) {
       const { prediction_text, similarity } = res.data;
       const constructionStage = prediction_text.replace('The classified construction stage is: ', '');
 
-      if (constructionStage === 'Flooring') {
+      if (constructionStage === selectedStage) {
         setPrediction(constructionStage);
         setSimilarity(similarity);
 
-        // Add new task to the to-do list
         const newTask = {
           id: Date.now(),
           image: preview,
-          text: `Prediction: ${constructionStage} - Similarity: ${similarity}%`,
+          text: `Prediction: ${constructionStage} - Progress: ${similarity}%`,
+          timestamp: new Date().toLocaleString(),
         };
         setTasks([...tasks, newTask]);
-
-        // Update the Dashboard predictions
-        onPredictionUpdate(constructionStage, similarity);
       } else {
         await axios.post(`${flask_url}/delete`, { message: -1 });
         alert('The image is incorrect');
@@ -93,6 +96,42 @@ function PredictForm({ onPredictionUpdate }) {
 
   return (
     <div className="main-container">
+      <div className="side-nav">
+        {stagesData.map((stage) => (
+          <button
+            key={stage.id}
+            className={`nav-button ${selectedStage === stage.id ? 'active' : ''}`}
+            onClick={() => setSelectedStage(stage.id)}
+          >
+            {stage.title}
+          </button>
+        ))}
+      </div>
+
+      {/* Content for Selected Stage */}
+      <div className="predictcontent">
+        <h1>{selectedStage}</h1>
+        <div className="predict-form-container">
+          <input type="file" id="fileInput" onChange={onFileChange} accept="image/*" />
+          <label htmlFor="fileInput" className="upload-button">Upload Image</label>
+
+          {preview && (
+            <div>
+              <h3>Image Preview:</h3>
+              <img src={preview} alt="Selected file preview" className="preview-image" />
+            </div>
+          )}
+
+          <button onClick={onPredict} className="predict-button">Predict</button>
+          {prediction && similarity !== null && (
+            <div>
+              <h3>Predicted Progress:</h3>
+              <pre>{prediction} - {similarity}%</pre>
+            </div>
+          )}
+        </div>
+      </div>
+
       <div className="todo-list">
         <h2>Progression Rate:</h2>
         <ul>
@@ -104,27 +143,6 @@ function PredictForm({ onPredictionUpdate }) {
             </li>
           ))}
         </ul>
-      </div>
-
-      <div className="predict-form-container">
-        <h1>Flooring</h1>
-        <input type="file" id="fileInput" onChange={onFileChange} accept="image/*" />
-        <label htmlFor="fileInput" className="upload-button">Upload Image</label>
-
-        {preview && (
-          <div>
-            <h3>Image Preview:</h3>
-            <img src={preview} alt="Selected file preview" className="preview-image" />
-          </div>
-        )}
-
-        <button onClick={onPredict} className="predict-button">Predict</button>
-        {prediction && similarity !== null && (
-          <div>
-            <h3>Predicted Progress:</h3>
-            <pre>{prediction} - {similarity}%</pre>
-          </div>
-        )}
       </div>
 
       {modalImage && (
@@ -139,4 +157,4 @@ function PredictForm({ onPredictionUpdate }) {
   );
 }
 
-export default PredictForm;
+export default Stages;
