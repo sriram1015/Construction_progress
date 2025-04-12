@@ -12,16 +12,15 @@ export default function Login({ onLogin }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Mock login logic
         if (username && password && memberType) {
             const userData = { username, memberType };
             onLogin(userData); // Update sessionStorage and state in Main
-            toast.success("Login Successful!", { position: "top-center", autoClose: 2000 }); // Ensure autoClose is set
+            toast.success("Login Successful!", { position: "top-center"});
             setTimeout(() => {
                 navigate(memberType === "assistantengineer" ? "/vill" : "/stage");
             }, 2000); // Delay navigation to allow toast to display
         } else {
-            toast.error("Please fill in all fields", { position: "top-center", autoClose: 2000 }); // Ensure autoClose is set
+            toast.error("Please fill in all fields", { position: "top-center", autoClose: 2000 });
         }
     };
 
@@ -72,7 +71,7 @@ export default function Login({ onLogin }) {
                     </button>
                 </form>
             </div>
-            <ToastContainer autoClose={2000} />        
-            </div>
+            <ToastContainer autoClose={2000} />
+        </div>
     );
 }

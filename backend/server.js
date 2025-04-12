@@ -5,7 +5,6 @@ const connectDB = require('./config/db'); // Regular user DB connection
 //const { connectAdminDB } = require('./config/admindb'); // Admin DB connection
 const authRoutes = require('./routes/auth');
 const addrole = require('./routes/addrole');
-
 const app = express();
 const port = 5001;
 
@@ -21,7 +20,6 @@ connectDB(); // For regular users
 // Use authentication routes
 app.use('/auth', authRoutes);
 app.use('/add', addrole);
-
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}.....✅`);
 });

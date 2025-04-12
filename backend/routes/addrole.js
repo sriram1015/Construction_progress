@@ -66,4 +66,28 @@ router.post('/role/addrole', upload.single('image'), async (req, res) => {
     }
 });
 
+
+// Endpoint to fetch all roles with stageContent
+// Endpoint to fetch the last inserted role
+router.get('/roles/last', async (req, res) => {
+    try {
+        const lastRole = await Role.findOne({}, {}, { sort: { _id: -1 } }); // Fetch the last inserted document
+        if (!lastRole) {
+            return res.status(404).json({ error: 'No roles found.' });
+        }
+        const formattedRole = {
+            id: lastRole._id,
+            title: lastRole.title,
+            stageContent: Object.entries(lastRole.stageContent).map(([key, value]) => ({
+                stage: key,
+                content: value,
+            })),
+        };
+        res.json(formattedRole);
+    } catch (err) {
+        console.error('Error fetching last role:', err);
+        res.status(500).json({ error: 'Failed to fetch last role.' });
+    }
+});
+
 module.exports = router;

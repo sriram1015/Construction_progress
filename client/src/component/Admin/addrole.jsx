@@ -18,6 +18,18 @@ const AddRole = () => {
     const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedStageName, setSelectedStageName] = useState(''); // State for selected stage name
+
+    // Predefined list of stage names
+    const stageNames = [
+        'Foundation',
+        'Plinth',
+        'Column',
+        'Beam',
+        'Roofing',
+        'Finishing',
+        'Painting',
+    ];
 
     const clearInputs = () => {
         setTitle('');
@@ -56,10 +68,17 @@ const AddRole = () => {
     };
 
     const addStage = () => {
+        if (!selectedStageName) {
+            setError('Please select a stage name.');
+            setTimeout(() => setError(''), 5000);
+            return;
+        }
+
         setStageContent((prev) => ({
             ...prev,
-            [`Stage ${Object.keys(prev).length + 1}`]: '',
+            [selectedStageName]: '',
         }));
+        setSelectedStageName(''); // Reset the dropdown after adding
     };
 
     const handleStageChange = (stageName, content) => {
@@ -81,6 +100,7 @@ const AddRole = () => {
             setIsLoading(false);
         }
     };
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -91,7 +111,6 @@ const AddRole = () => {
             reader.readAsDataURL(file);
         }
     };
-
 
     useEffect(() => {
         fetchUsers();
@@ -117,10 +136,9 @@ const AddRole = () => {
                 />
 
                 <div className="upload-container">
-                    {/* Upload Button Section */}
                     <div className="role-image-field" onClick={() => document.getElementById("imageInput").click()}>
                         <AiOutlineUpload size={100} color="#007bff" />
-                        <div className="upload-text">Upload a relevant image for this role.</div>
+                        <div className="upload-text">Upload BluePrint of the Project.</div>
                         <input
                             type="file"
                             accept="image/*"
@@ -128,10 +146,9 @@ const AddRole = () => {
                             onChange={handleImageChange}
                             hidden
                             aria-label="Upload Image"
-                        />
+                        /> 
                     </div>
 
-                    {/* Image Preview Section (Separate) */}
                     {image && (
                         <div className="image-preview-container">
                             <img src={image} alt="Uploaded Preview" className="role-image-preview" />
@@ -141,6 +158,30 @@ const AddRole = () => {
 
                 <div className="stages-section">
                     <h3>Construction Stages</h3>
+                    <div className="stage-dropdown">
+                        <select
+                            value={selectedStageName}
+                            onChange={(e) => setSelectedStageName(e.target.value)}
+                            aria-label="Select Stage Name"
+                        >
+                            <option value="" disabled>
+                                Select a stage name
+                            </option>
+                            {stageNames.map((name) => (
+                                <option key={name} value={name}>
+                                    {name}
+                                </option>
+                            ))}
+                        </select>
+                        <button
+                            type="button"
+                            onClick={addStage}
+                            className="add-stage-btn"
+                        >
+                            Add Stage
+                        </button>
+                    </div>
+
                     {Object.keys(stageContent).map((stage) => (
                         <div key={stage} className="stage-editor">
                             <h4>{stage}</h4>
@@ -154,13 +195,6 @@ const AddRole = () => {
                             />
                         </div>
                     ))}
-                    <button
-                        type="button"
-                        onClick={addStage}
-                        className="add-stage-btn"
-                    >
-                        Add Stage
-                    </button>
                 </div>
 
                 <div className="assign-users-section">

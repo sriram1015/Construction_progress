@@ -4,38 +4,51 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Stage.css';
 
+const node_url = import.meta.env.VITE_NODE_URL;
 const flask_url = import.meta.env.VITE_FLASK_URL;
 
-const stagesData = [
-  { id: 'FOUNDATION', title: 'Foundation' },
-  { id: 'PLINTH AND BUILDING', title: 'Plinth and building' },
-  { id: 'LINTEL', title: 'Lintel' },
-  { id: 'ROOFING', title: 'Roofing' },
-  { id: 'PLASTERING', title: 'Plastering' },
-  { id: 'FLOORING', title: 'Flooring' },
-  { id: 'PAINTING', title: 'Painting' },
-];
-
 function Stages() {
-  const [selectedStage, setSelectedStage] = useState('Foundation');
-  const [file, setFile] = useState(null);
-  const [prediction, setPrediction] = useState(() => sessionStorage.getItem('prediction') || null);
-  const [similarity, setSimilarity] = useState(() => sessionStorage.getItem('similarity') || null);
-  const [preview, setPreview] = useState(() => sessionStorage.getItem('preview') || null);
+  const [lastRole, setLastRole] = useState(null); // State for the last inserted role
+  const [selectedStage, setSelectedStage] = useState(''); // Selected stage
+  const [title, setTitle] = useState(''); // Role title
+  const [username, setUser] = useState(''); // Assigned user
+  const [file, setFile] = useState(null); // File input state
+  const [preview, setPreview] = useState(null); // Image preview
+  const [isLoading, setIsLoading] = useState(false); // Loading state for prediction
+  const [prediction, setPrediction] = useState(null); // Prediction result
+  const [similarity, setSimilarity] = useState(null); // Similarity percentage
   const [tasks, setTasks] = useState(() => {
     const savedTasks = sessionStorage.getItem('tasks');
     return savedTasks ? JSON.parse(savedTasks) : [];
-  });
-  const [modalImage, setModalImage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  }); // Task list for progression rate
+  const [modalImage, setModalImage] = useState(null); // Modal for image preview
 
-  // Save data to sessionStorage whenever it changes
+  // Save tasks and other data to sessionStorage whenever they change
   useEffect(() => {
+    sessionStorage.setItem('tasks', JSON.stringify(tasks));
     sessionStorage.setItem('prediction', prediction);
     sessionStorage.setItem('similarity', similarity);
     sessionStorage.setItem('preview', preview);
-    sessionStorage.setItem('tasks', JSON.stringify(tasks));
-  }, [prediction, similarity, preview, tasks]);
+  }, [tasks, prediction, similarity, preview]);
+
+  // Fetch the last inserted role from the backend
+  useEffect(() => {
+    const fetchLastRole = async () => {
+      try {
+        const response = await axios.get(`${node_url}/add/roles/last`); // Fetch the last inserted role
+        console.log('Fetched Last Role:', response.data); // Debugging log
+        setLastRole(response.data);
+        setTitle(response.data.title); // Set the title
+        setUser(response.data.assignedUser); // Set the assigned user
+        setSelectedStage(response.data.stageContent[0]?.stage || ''); // Set the first stage as default
+      } catch (error) {
+        console.error('Error fetching last role:', error);
+        toast.error('Failed to load the last role.', { position: 'top-center', autoClose: 2000 });
+      }
+    };
+
+    fetchLastRole();
+  }, []);
 
   // Handle file input change
   const onFileChange = (e) => {
@@ -44,7 +57,7 @@ function Stages() {
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      setPreview(reader.result);
+      setPreview(reader.result); // Set the preview image
     };
     if (selectedFile) {
       reader.readAsDataURL(selectedFile);
@@ -61,15 +74,14 @@ function Stages() {
     setIsLoading(true); // Start loading
     const formData = new FormData();
     formData.append('image', file);
+    formData.append('selectedStage', selectedStage);
 
     try {
-      const res = await axios.post(`${flask_url}/predict`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      const response = await axios.post(`${flask_url}/predict`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      const { prediction_text, similarity } = res.data;
+      const { prediction_text, similarity } = response.data;
       const constructionStage = prediction_text.replace('The classified construction stage is: ', '');
 
       if (constructionStage === selectedStage) {
@@ -84,14 +96,14 @@ function Stages() {
         };
         setTasks([...tasks, newTask]);
 
-        toast.success('Prediction successful!', { position: 'top-center' , autoclose: 2000});
+        toast.success('Prediction successful!', { position: 'top-center', autoClose: 2000 });
       } else {
         await axios.post(`${flask_url}/delete`, { message: -1 });
-        toast.error('The image does not match the selected stage.', { position: 'top-center', autoclose: 2000 });
+        toast.error('The image does not match the selected stage.', { position: 'top-center', autoClose: 2000 });
       }
     } catch (error) {
       console.error('Error during prediction:', error);
-      toast.error('An error occurred during prediction. Please try again.', { position: 'top-center' });
+      toast.error('Prediction failed. Please try again.', { position: 'top-center', autoClose: 2000 });
     } finally {
       setIsLoading(false); // Stop loading
     }
@@ -110,20 +122,22 @@ function Stages() {
   return (
     <div className="main-container">
       <div className="side-nav">
-        {stagesData.map((stage) => (
+        <h1>{title}</h1>
+        <h1>{username}</h1>
+        {lastRole?.stageContent.map((content, index) => (
           <button
-            key={stage.id}
-            className={`nav-button ${selectedStage === stage.id ? 'active' : ''}`}
-            onClick={() => setSelectedStage(stage.id)}
+            key={index}
+            className={`nav-button ${selectedStage === content.stage ? 'active' : ''}`}
+            onClick={() => setSelectedStage(content.stage)}
           >
-            {stage.title}
+            {content.stage}
           </button>
         ))}
       </div>
 
       {/* Content for Selected Stage */}
       <div className="predictcontent">
-        <h1>{selectedStage}</h1>
+        <h1>{selectedStage || 'Select a Stage'}</h1>
         <div className="predict-form-container">
           <input type="file" id="fileInput" onChange={onFileChange} accept="image/*" />
           <label htmlFor="fileInput" className="upload-button">Upload Image</label>
@@ -138,15 +152,17 @@ function Stages() {
           <button onClick={onPredict} className="predict-button" disabled={isLoading}>
             {isLoading ? 'Predicting...' : 'Predict'}
           </button>
+
           {prediction && similarity !== null && (
             <div>
-              <h3>Predicted Progress:</h3>
-              <pre>{prediction} - {similarity}%</pre>
+              <h3>Prediction Result:</h3>
+              <p>{prediction} - {similarity}%</p>
             </div>
           )}
         </div>
       </div>
 
+      {/* Progression Rate */}
       <div className="todo-list">
         <h2>Progression Rate:</h2>
         <ul>
@@ -160,6 +176,7 @@ function Stages() {
         </ul>
       </div>
 
+      {/* Modal for Image Preview */}
       {modalImage && (
         <div className="modal" onClick={closeImageModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -168,7 +185,8 @@ function Stages() {
           </div>
         </div>
       )}
-<ToastContainer autoClose={2000} />
+
+      <ToastContainer autoClose={2000} />
     </div>
   );
 }
