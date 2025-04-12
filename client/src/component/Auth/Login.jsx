@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Login({ onLogin }) {
     const [username, setUsername] = useState("");
@@ -14,10 +16,12 @@ export default function Login({ onLogin }) {
         if (username && password && memberType) {
             const userData = { username, memberType };
             onLogin(userData); // Update sessionStorage and state in Main
-            alert("Login Successful");
-            navigate(memberType === "assistantengineer" ? "/vill" : "/stage");
+            toast.success("Login Successful!", { position: "top-center", autoClose: 2000 }); // Ensure autoClose is set
+            setTimeout(() => {
+                navigate(memberType === "assistantengineer" ? "/vill" : "/stage");
+            }, 2000); // Delay navigation to allow toast to display
         } else {
-            alert("Please fill in all fields");
+            toast.error("Please fill in all fields", { position: "top-center", autoClose: 2000 }); // Ensure autoClose is set
         }
     };
 
@@ -68,6 +72,7 @@ export default function Login({ onLogin }) {
                     </button>
                 </form>
             </div>
-        </div>
+            <ToastContainer autoClose={2000} />        
+            </div>
     );
 }

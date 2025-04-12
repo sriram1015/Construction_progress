@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-//import './PredictForm.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './Stage.css';
 
 const flask_url = import.meta.env.VITE_FLASK_URL;
@@ -26,7 +27,9 @@ function Stages() {
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
   const [modalImage, setModalImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Save data to sessionStorage whenever it changes
   useEffect(() => {
     sessionStorage.setItem('prediction', prediction);
     sessionStorage.setItem('similarity', similarity);
@@ -34,6 +37,7 @@ function Stages() {
     sessionStorage.setItem('tasks', JSON.stringify(tasks));
   }, [prediction, similarity, preview, tasks]);
 
+  // Handle file input change
   const onFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
@@ -47,12 +51,14 @@ function Stages() {
     }
   };
 
+  // Handle prediction
   const onPredict = async () => {
     if (!file) {
-      alert('Please select a file first.');
+      toast.error('Please select a file first.', { position: 'top-center', autoClose: 2000 });
       return;
     }
 
+    setIsLoading(true); // Start loading
     const formData = new FormData();
     formData.append('image', file);
 
@@ -77,19 +83,26 @@ function Stages() {
           timestamp: new Date().toLocaleString(),
         };
         setTasks([...tasks, newTask]);
+
+        toast.success('Prediction successful!', { position: 'top-center' , autoclose: 2000});
       } else {
         await axios.post(`${flask_url}/delete`, { message: -1 });
-        alert('The image is incorrect');
+        toast.error('The image does not match the selected stage.', { position: 'top-center', autoclose: 2000 });
       }
     } catch (error) {
       console.error('Error during prediction:', error);
+      toast.error('An error occurred during prediction. Please try again.', { position: 'top-center' });
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
+  // Open image modal
   const openImageModal = (image) => {
     setModalImage(image);
   };
 
+  // Close image modal
   const closeImageModal = () => {
     setModalImage(null);
   };
@@ -122,7 +135,9 @@ function Stages() {
             </div>
           )}
 
-          <button onClick={onPredict} className="predict-button">Predict</button>
+          <button onClick={onPredict} className="predict-button" disabled={isLoading}>
+            {isLoading ? 'Predicting...' : 'Predict'}
+          </button>
           {prediction && similarity !== null && (
             <div>
               <h3>Predicted Progress:</h3>
@@ -153,6 +168,7 @@ function Stages() {
           </div>
         </div>
       )}
+<ToastContainer autoClose={2000} />
     </div>
   );
 }

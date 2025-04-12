@@ -1,128 +1,121 @@
-/* Style for the navigation bar */
-.navbar {
-    background-color: #ffffff; /* Changed to a clean white background */
-    padding: 15px 20px;
-    border-radius: 0 0 12px 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+/* General NavBar container styling */
+.navBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #007bff; /* Primary blue background */
+    padding: 15px 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #fff;
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
 }
 
-/* Logo or title in the navbar */
-.navbar .logo {
+/* Logo styling */
+.navBar .logo {
     font-size: 24px;
     font-weight: bold;
-    color: #007bff;
+    color: #ffffff;
     text-decoration: none;
-    margin-left: 20px;
+    transition: color 0.3s ease;
 }
 
-/* Style for the navigation list */
+.navBar .logo:hover {
+    color: #ffdd57; /* Add a hover effect for the logo */
+}
+
+/* Navigation list container */
 .nav-list {
-    list-style: none;
     display: flex;
-    gap: 15px;
+    gap: 20px;
+    list-style: none;
     margin: 0;
     padding: 0;
 }
 
-/* Style for the navigation links */
-.nav-link {
-    color: #333333; /* Neutral text color */
+/* Individual nav item container */
+.nav-item {
+    margin: 0;
+}
+
+/* Link styling */
+.button-link {
+    display: flex;
+    align-items: center;
     text-decoration: none;
+    color: #0f0f0f;
+    background-color: #ebf709ec; /* White background for links */
     font-size: 16px;
+    font-weight: 500;
     padding: 10px 15px;
     border-radius: 6px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    font-weight: 500;
-}
-
-/* Style for link hover effect */
-.nav-link:hover {
-    background-color: #007bff;
-    color: #ffffff;
-}
-
-/* Additional styles for active links */
-.nav-link.active {
-    background-color: #0056b3;
-    color: #ffffff;
-}
-
-/* Content section styling to avoid overlap with fixed navbar */
-.content {
-    padding-top: 80px; /* Adjusted for navbar height */
-    text-align: center;
-    background-color: #f4f7fc; /* Light background for better readability */
-    padding: 20px;
-    gap: 20px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.content h1 {
-    color: #333333;
-    font-size: 28px;
-    margin-bottom: 20px;
-}
-
-/* Style for the content list */
-.content li {
-    list-style: none;
-    margin: 15px 0;
-}
-
-.content li a {
-    font-size: 18px;
-    color: #ffffff;
-    padding: 12px 25px;
-    background-color: #007bff;
-    text-decoration: none;
-    border-radius: 8px;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Hover effect for content links */
-.content li a:hover {
+/* Hover effect for links */
+.button-link:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+    color: #ffffff;
+}
+
+/* Icon styling */
+.nav-icon {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+/* Button styling for Logout/Login */
+button.nav-link {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect for buttons */
+button.nav-link:hover {
     background-color: #0056b3;
     transform: scale(1.05);
 }
 
-/* Responsive design for tablets */
+/* Responsive design for smaller screens */
 @media (max-width: 768px) {
+    .navBar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+    }
+
     .nav-list {
         flex-direction: column;
         gap: 10px;
-        align-items: center;
+        width: 100%;
     }
 
-    .content li a {
-        font-size: 16px;
+    .nav-item {
+        width: 100%;
+    }
+
+    .nav-link {
+        width: 100%;
+        text-align: left;
         padding: 10px 20px;
     }
 }
 
-/* Responsive design for mobile devices */
-@media (max-width: 480px) {
-    .navbar {
-        padding: 10px 15px;
-    }
-
-    .nav-link {
-        font-size: 14px;
-        padding: 8px 12px;
-    }
-
-    .content li a {
-        font-size: 14px;
-        padding: 8px 15px;
-    }
+/* Sticky Navbar Effect */
+.navBar.sticky {
+    background-color: #0056b3; /* Slightly darker background when sticky */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
