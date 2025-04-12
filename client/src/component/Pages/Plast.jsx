@@ -25,7 +25,7 @@ function PredictForm({ onPredictionUpdate }) {
     sessionStorage.setItem('prediction', prediction);
     sessionStorage.setItem('similarity', similarity);
     sessionStorage.setItem('preview', preview);
-    sessionStorage.setItem('tasks', JSON.stringify(tasks));  // Use JSON.stringify instead of Json.stringify
+    sessionStorage.setItem('tasks', JSON.stringify(tasks));  
   }, [prediction, similarity, preview, tasks]);
 
   const onFileChange = (e) => {
