@@ -6,13 +6,13 @@ import './Stage.css';
 const flask_url = import.meta.env.VITE_FLASK_URL;
 
 const stagesData = [
-  { id: 'Foundation', title: 'Foundation' },
-  { id: 'Flooring', title: 'Flooring' },
-  { id: 'PlinthBeam', title: 'Plinth Beam' },
-  { id: 'Lintel', title: 'Lintel' },
-  { id: 'Roofing', title: 'Roofing' },
-  { id: 'Plastering', title: 'Plastering' },
-  { id: 'Painting', title: 'Painting' },
+  { id: 'FOUNDATION', title: 'Foundation' },
+  { id: 'PLINTH AND BUILDING', title: 'Plinth and building' },
+  { id: 'LINTEL', title: 'Lintel' },
+  { id: 'ROOFING', title: 'Roofing' },
+  { id: 'PLASTERING', title: 'Plastering' },
+  { id: 'FLOORING', title: 'Flooring' },
+  { id: 'PAINTING', title: 'Painting' },
 ];
 
 function Stages() {
