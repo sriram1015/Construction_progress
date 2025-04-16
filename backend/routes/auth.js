@@ -94,6 +94,43 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.post('/register', async (req, res) => {
+  const { username, email, password, memberType, secretKey } = req.body;
+  console.log(`✅Attempting registration for email: ${email}, memberType: ${memberType}`);
+  
+  try {
+    // Check secret key for district users
+    if (memberType === 'districtuser' && secretKey !== 'AdarshT') {
+      console.log('❗❗Invalid secret key provided.');
+      return res.status(400).json({ status: 'error', message: 'Invalid Secret Key' });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email, memberType });
+    if (existingUser) {
+      console.log('User already exists.❗❗');
+      return res.status(400).json({ status: 'error', message: 'User already exists' });
+    }
+
+    // Hash password before saving
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      memberType
+    });
+
+    await newUser.save();
+    console.log('User registered successfully.✅');
+    res.json({ status: 'ok', message: 'Registration successful' });
+  } catch (error) {
+    console.error('❗❗Error during registration:', error);
+    res.status(500).json({ status: 'error', message: 'An error occurred during registration. Please try again later.' });
+  }
+});
+
 // API to fetch all users
 router.get('/all-users', async (req, res) => {
   try {

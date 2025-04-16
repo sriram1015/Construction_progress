@@ -35,7 +35,8 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     color: #fff;
     position: fixed;
-    top: 0;
+    top:90%;
+    bottom: 0;
     width: 100%;
     z-index: 1000;
 }

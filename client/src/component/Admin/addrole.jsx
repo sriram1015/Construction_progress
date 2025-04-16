@@ -23,11 +23,12 @@ const AddRole = () => {
     // Predefined list of stage names
     const stageNames = [
         'Foundation',
-        'Plinth',
-        'Column',
-        'Beam',
+        'Plinth and building',
+        'Lintel',
         'Roofing',
-        'Finishing',
+        'Roofing',
+        'Plastering',
+        'Flooring',
         'Painting',
     ];
 
