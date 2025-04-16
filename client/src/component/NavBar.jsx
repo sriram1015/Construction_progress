@@ -35,7 +35,7 @@ const NavBar = () => {
     ].filter(Boolean);
 
     return (
-        <div className="navBar">
+        <div className="nav-Bar">
             <div className="logo">
                 <Link to="/" className="nav-link">
                     <img src="/dcirs.png" alt="SRV Groups" className="logo-image" />

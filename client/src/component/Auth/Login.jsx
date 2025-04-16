@@ -19,20 +19,20 @@ export default function Login() {
             try {
                 const userData = { username, memberType }; // Mock user data
                 setUser(userData); // Update context with user details
-                toast.success("Login Successful!", { position: "top-center" });
+                toast.success("Login Successful!", { position: "top-right" });
 
                 setTimeout(() => {
                     navigate("/profile"); // Redirect to profile page after login
                 }, 2000);
             } catch (error) {
                 toast.error("Invalid credentials. Please try again.", {
-                    position: "top-center",
+                    position: "top-right",
                     autoClose: 2000,
                 });
             }
         } else {
             toast.error("Please fill in all fields", {
-                position: "top-center",
+                position: "top-right",
                 autoClose: 2000,
             });
         }

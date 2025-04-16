@@ -1,108 +1,84 @@
-/* General NavBar container styling */
-/* Logo container */
+.nav-Bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    background-color: #ffffff;
+    padding: 10px 25px;
+    border-radius: 35px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    width: max-content;
+    max-width: 90%;
+}
+
+/* Logo styling */
 .logo {
     display: flex;
     align-items: center;
+    gap: 10px;
+    margin-right: 15px;
 }
 
-/* Logo image styling */
 .logo-image {
-    height: 30px; /* Adjust the height as needed */
-    width: auto; /* Maintain aspect ratio */
-    margin-right: 10px; /* Add spacing between the logo and other elements */
-    transition: transform 0.3s ease, opacity 0.3s ease; /* Add hover effects */
-    cursor: pointer; /* Make the logo clickable */
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
 }
 
-/* Hover effect for the logo */
-.logo-image:hover {
-    transform: scale(1.1); /* Slight zoom effect */
-    opacity: 0.9; /* Slight fade effect */
+/* Navigation List */
+.nav-list {
+    display: flex;
+    gap: 20px;
+    align-items: center;
 }
 
-/* Responsive design for smaller screens */
-@media (max-width: 768px) {
-    .logo-image {
-        height: 40px; /* Reduce size for smaller screens */
-    }
-}
-.navBar {
+/* Nav Item Styling */
+.nav-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    background-color: #007bff;
-    padding: 10px 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    color: #fff;
-    position: fixed;
-    top:90%;
-    bottom: 0;
-    width: 100%;
-    z-index: 1000;
 }
 
-/* Individual nav item container */
-.nav-item {
-    margin: 0 10px;
-}
-
-/* Link styling */
+/* Nav Link/Button Styles */
 .nav-link {
     display: flex;
     align-items: center;
-    text-decoration: none;
-    color: #fff;
-    font-size: 16px;
+    gap: 6px;
     font-weight: 500;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-/* Hover effect for links */
-.nav-link:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    color: #fff;
-}
-
-/* Icon styling */
-.nav-icon {
-    margin-right: 8px;
-    font-size: 18px;
-}
-
-/* Button styling for Logout/Login */
-button.nav-link {
-    background: none;
+    font-size: 14px;
+    color: #111010;
+    
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    background: transparent;
     border: none;
     cursor: pointer;
+}
+
+.nav-link:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.nav-icon {
     font-size: 16px;
-    font-weight: 500;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
 }
 
-/* Hover effect for buttons */
+/* Ensure logout button shows text clearly */
+button.nav-link {
+    color: #111010;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
 button.nav-link:hover {
-    background-color: #0056b3;
-}
-
-/* Responsive design for smaller screens */
-@media (max-width: 768px) {
-    .navBar {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .nav-item {
-        margin: 5px 0;
-    }
-
-    .nav-link {
-        font-size: 14px;
-    }
+    background-color: #007bff;
+    color: white;
 }
