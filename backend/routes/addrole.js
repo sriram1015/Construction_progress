@@ -8,7 +8,7 @@ const Role = mongoose.model('Role', new mongoose.Schema({
     title: { type: String, required: true },
     image: { type: String, required: false },
     stageContent: { type: Object, required: true },
-    assignedUser: { type: String, required: true }, 
+    assignedUser: { type: String, required: true },
 }));
 
 // Middleware for file uploads
@@ -66,27 +66,34 @@ router.post('/role/addrole', upload.single('image'), async (req, res) => {
     }
 });
 
+// Endpoint to fetch roles assigned to the logged-in user
+router.get('/roles/user', async (req, res) => {
+    const { username } = req.query; // Extract username from query parameters
 
-// Endpoint to fetch all roles with stageContent
-// Endpoint to fetch the last inserted role
-router.get('/roles/last', async (req, res) => {
+    if (!username) {
+        return res.status(400).json({ error: 'Username is required.' });
+    }
+
     try {
-        const lastRole = await Role.findOne({}, {}, { sort: { _id: -1 } }); // Fetch the last inserted document
-        if (!lastRole) {
-            return res.status(404).json({ error: 'No roles found.' });
+        const roles = await Role.find({ assignedUser: username }); // Fetch roles assigned to the user
+        if (!roles || roles.length === 0) {
+            return res.status(404).json({ error: 'No roles found for the user.' });
         }
-        const formattedRole = {
-            id: lastRole._id,
-            title: lastRole.title,
-            stageContent: Object.entries(lastRole.stageContent).map(([key, value]) => ({
+
+        // Format the roles to include stageContent as an array
+        const formattedRoles = roles.map((role) => ({
+            id: role._id,
+            title: role.title,
+            stageContent: Object.entries(role.stageContent).map(([key, value]) => ({
                 stage: key,
                 content: value,
             })),
-        };
-        res.json(formattedRole);
+        }));
+
+        res.json(formattedRoles);
     } catch (err) {
-        console.error('Error fetching last role:', err);
-        res.status(500).json({ error: 'Failed to fetch last role.' });
+        console.error('Error fetching user roles:', err);
+        res.status(500).json({ error: 'Failed to fetch user roles.' });
     }
 });
 

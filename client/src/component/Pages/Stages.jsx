@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import { UserContext } from '../Auth/UseContext'; // Import UserContext
 import 'react-toastify/dist/ReactToastify.css';
 import './Stage.css';
 
 const node_url = import.meta.env.VITE_NODE_URL;
 const flask_url = import.meta.env.VITE_FLASK_URL;
-
 function Stages() {
-  const [lastRole, setLastRole] = useState(null); // State for the last inserted role
+  const { user } = useContext(UserContext); // Access logged-in user details
+  const [roles, setRoles] = useState([]); // Roles assigned to the user
   const [selectedStage, setSelectedStage] = useState(''); // Selected stage
   const [title, setTitle] = useState(''); // Role title
-  const [username, setUser] = useState(''); // Assigned user
   const [file, setFile] = useState(null); // File input state
   const [preview, setPreview] = useState(null); // Image preview
   const [isLoading, setIsLoading] = useState(false); // Loading state for prediction
@@ -20,7 +20,8 @@ function Stages() {
   const [tasks, setTasks] = useState(() => {
     const savedTasks = sessionStorage.getItem('tasks');
     return savedTasks ? JSON.parse(savedTasks) : [];
-  }); // Task list for progression rate
+  });
+  const [progressionRate, setProgressionRate] = useState({}); // Progression rate for each stage
   const [modalImage, setModalImage] = useState(null); // Modal for image preview
 
   // Save tasks and other data to sessionStorage whenever they change
@@ -31,24 +32,53 @@ function Stages() {
     sessionStorage.setItem('preview', preview);
   }, [tasks, prediction, similarity, preview]);
 
-  // Fetch the last inserted role from the backend
+  // Fetch roles assigned to the logged-in user
   useEffect(() => {
-    const fetchLastRole = async () => {
+    const fetchUserRoles = async () => {
+      if (!user) {
+        toast.error('Please log in to view your stages.', { position: 'top-center', autoClose: 2000 });
+        return;
+      }
+
       try {
-        const response = await axios.get(`${node_url}/add/roles/last`); // Fetch the last inserted role
-        console.log('Fetched Last Role:', response.data); // Debugging log
-        setLastRole(response.data);
-        setTitle(response.data.title); // Set the title
-        setUser(response.data.assignedUser); // Set the assigned user
-        setSelectedStage(response.data.stageContent[0]?.stage || ''); // Set the first stage as default
+        const response = await axios.get(`${node_url}/add/roles/user`, {
+          params: { username: user.username }, // Pass the logged-in user's username
+        });
+        console.log('Fetched User Roles:', response.data); // Debugging log
+        setRoles(response.data);
+
+        // Set the first role and stage as default if available
+        if (response.data.length > 0) {
+          setTitle(response.data[0].title);
+          if (response.data[0].stageContent.length > 0) {
+            setSelectedStage(response.data[0].stageContent[0].stage);
+          }
+        }
       } catch (error) {
-        console.error('Error fetching last role:', error);
-        toast.error('Failed to load the last role.', { position: 'top-center', autoClose: 2000 });
+        console.error('Error fetching user roles:', error);
+        toast.error('Failed to load roles for the logged-in user.', { position: 'top-center', autoClose: 2000 });
       }
     };
 
-    fetchLastRole();
-  }, []);
+    fetchUserRoles();
+  }, [user]); // Re-run when the logged-in user changes
+
+  // Update progression rate whenever tasks change
+  useEffect(() => {
+    const calculateProgressionRate = () => {
+      const rate = {};
+      roles.forEach((role) => {
+        role.stageContent.forEach((stage) => {
+          const stageTasks = tasks.filter((task) => task.stage === stage.stage);
+          const completedTasks = stageTasks.length;
+          rate[stage.stage] = completedTasks; // Store the progression rate for each stage
+        });
+      });
+      setProgressionRate(rate);
+    };
+
+    calculateProgressionRate();
+  }, [tasks, roles]);
 
   // Handle file input change
   const onFileChange = (e) => {
@@ -90,6 +120,7 @@ function Stages() {
 
         const newTask = {
           id: Date.now(),
+          stage: selectedStage,
           image: preview,
           text: `Prediction: ${constructionStage} - Progress: ${similarity}%`,
           timestamp: new Date().toLocaleString(),
@@ -98,7 +129,6 @@ function Stages() {
 
         toast.success('Prediction successful!', { position: 'top-center', autoClose: 2000 });
       } else {
-        await axios.post(`${flask_url}/delete`, { message: -1 });
         toast.error('The image does not match the selected stage.', { position: 'top-center', autoClose: 2000 });
       }
     } catch (error) {
@@ -122,16 +152,23 @@ function Stages() {
   return (
     <div className="main-container">
       <div className="side-nav">
-        <h1>{title}</h1>
-        <h1>{username}</h1>
-        {lastRole?.stageContent.map((content, index) => (
-          <button
-            key={index}
-            className={`nav-button ${selectedStage === content.stage ? 'active' : ''}`}
-            onClick={() => setSelectedStage(content.stage)}
-          >
-            {content.stage}
-          </button>
+      <div>
+      <h3>{title}</h3>
+
+      <h4>Logged in as: {user?.username || 'Guest'}</h4> 
+      </div>
+        {roles.map((role, index) => (
+          <div key={index}>
+            {role.stageContent.map((stage, idx) => (
+              <button
+                key={idx}
+                className={`nav-button ${selectedStage === stage.stage ? 'active' : ''}`}
+                onClick={() => setSelectedStage(stage.stage)}
+              >
+                {stage.stage} - Progress: {progressionRate[stage.stage] || 0} tasks
+              </button>
+            ))}
+          </div>
         ))}
       </div>
 
