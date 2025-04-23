@@ -11,7 +11,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-model = load_model("cnn_hybrid.h5")
+model = load_model("lightweight_cnn_hybrid.h5")
 
 load_dotenv()
 
@@ -37,7 +37,7 @@ def predict():
         filepath = os.path.join(basepath, 'uploads', f.filename)
         f.save(filepath)
 
-        img = image.load_img(filepath, target_size=(100, 100))  
+        img = image.load_img(filepath, target_size=(224, 224))  
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
 

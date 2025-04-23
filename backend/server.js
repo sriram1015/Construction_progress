@@ -5,7 +5,7 @@ const connectDB = require('./config/db'); // Regular user DB connection
 //const { connectAdminDB } = require('./config/admindb'); // Admin DB connection
 const authRoutes = require('./routes/auth');
 const addrole = require('./routes/addrole');
-const profile = reqiure('./routes/Profile');
+const profile = require('./routes/Profile');
 const app = express();
 const port = 5001;
 
