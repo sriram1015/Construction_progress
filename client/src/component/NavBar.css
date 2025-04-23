@@ -1,0 +1,84 @@
+.nav-Bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    background-color: #ffffff;
+    padding: 10px 25px;
+    border-radius: 35px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    width: max-content;
+    max-width: 90%;
+}
+
+/* Logo styling */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: 15px;
+}
+
+.logo-image {
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
+}
+
+/* Navigation List */
+.nav-list {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+/* Nav Item Styling */
+.nav-item {
+    display: flex;
+    align-items: center;
+}
+
+/* Nav Link/Button Styles */
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #111010;
+    
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-link:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.nav-icon {
+    font-size: 16px;
+}
+
+/* Ensure logout button shows text clearly */
+button.nav-link {
+    color: #111010;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+button.nav-link:hover {
+    background-color: #007bff;
+    color: white;
+}

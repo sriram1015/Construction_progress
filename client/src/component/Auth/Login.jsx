@@ -1,168 +1,90 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
-
-const apiUrl = 'http://localhost:5001';
+import { toast, ToastContainer } from "react-toastify";
+import { UserContext } from "./UseContext";
+import "react-toastify/dist/ReactToastify.css";
+import "./Login.css";
 
 export default function Login() {
-  const [username, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [memberType, setMemberType] = useState("");
-  const navigate = useNavigate();
+    const { setUser } = useContext(UserContext); // Access the UserContext to update user details
+    const [username, setUsername] = useState(""); // State for username
+    const [password, setPassword] = useState(""); // State for password
+    const [memberType, setMemberType] = useState(""); // State for member type
+    const navigate = useNavigate(); // React Router's navigation hook
 
-  const handleAdmin = async (e) => {
-    e.preventDefault();
-    navigate('/admin');
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+        if (username && password && memberType) {
+            try {
+                const userData = { username, memberType }; // Mock user data
+                setUser(userData); // Update context with user details
+                toast.success("Login Successful!", { position: "top-right" });
 
-    // Normalize email to lowercase
-    const normalizedEmail = username.toLowerCase();
-
-    console.log("Email:", normalizedEmail);
-    console.log("Password:", password);
-    console.log("Member Type:", memberType);
-
-    try {
-      const response = await axios.post(`${apiUrl}/auth/login`, {
-        username,
-        password,
-        memberType, 
-      });
-
-      if (response.data.status === "ok") {
-        alert("Login Successful");
-        if (memberType === "assistantengineer") {
-          navigate("/vill");
+                setTimeout(() => {
+                    navigate("/profile"); // Redirect to profile page after login
+                }, 2000);
+            } catch (error) {
+                toast.error("Invalid credentials. Please try again.", {
+                    position: "top-right",
+                    autoClose: 2000,
+                });
+            }
         } else {
-          navigate("/dashboard");
+            toast.error("Please fill in all fields", {
+                position: "top-right",
+                autoClose: 2000,
+            });
         }
-      } else {
-        alert(`Error: ${response.data.message}`);
-      }
-    } catch (error) {
-      console.error('Error during login:', error.response ? error.response.data : error.message);
-      alert('Failed to login. Please try again later.');
-    }
-  };
+    };
 
-  return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '100vh',
-    }}>
-      <div style={{
-        backgroundColor: '#fff',
-        padding: '40px',
-        width: '400px',
-        boxShadow: '0 0 20px rgba(0, 0, 0, 0.1)',
-        borderRadius: '8px'
-      }}>
-        <form onSubmit={handleSubmit}>
-          <h1 style={{ textAlign: 'center', marginBottom: '24px', color: '#343a40' }}>Login</h1>
-          <h3 style={{ marginBottom: '16px', color: '#343a40' }}>
-            Login As:
-            <button
-              onClick={handleAdmin}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'red',
-                textDecoration: 'underline',
-                cursor: 'pointer',
-                fontSize: '16px',
-                padding: '0',
-                fontWeight: 'bold'
-              }}
-            >
-              Admin?
-            </button>
-          </h3>
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ marginBottom: '8px', display: 'block', color: '#495057' }}>Select MemberType</label>
-            <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: '16px' }}>
-              <div style={{ flex: '1 1 100%', marginBottom: '8px' }}>
-                <select
-                  value={memberType}
-                  onChange={(e) => setMemberType(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    fontSize: '16px',
-                    border: '1px solid #ced4da',
-                    borderRadius: '4px',
-                    boxSizing: 'border-box'
-                  }}
-                >
-                  <option value="" disabled>Select Role</option>
-                  <option value="JuniorEngineer">JuniorEngineer</option>
-                  <option value="assistantengineer">AssistantEngineer</option>
-                  <option value="executiveengineer">ExecutiveEngineer</option>
-                  <option value="chiefengineer">ChiefEngineer</option>
-                </select>
-              </div>
+    return (
+        <div className="login-container">
+            <div className="login-form">
+                <form onSubmit={handleSubmit}>
+                    <h1 className="login-title">Login</h1>
+                    <div className="form-group">
+                        <label>Username</label>
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            placeholder="Enter username"
+                            className="form-input"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Enter password"
+                            className="form-input"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Member Type</label>
+                        <select
+                            value={memberType}
+                            onChange={(e) => setMemberType(e.target.value)}
+                            className="form-select"
+                        >
+                            <option value="" disabled>
+                                Select Role
+                            </option>
+                            <option value="JuniorEngineer">Junior Engineer</option>
+                            <option value="assistantengineer">
+                                Assistant Engineer
+                            </option>
+                        </select>
+                    </div>
+                    <button type="submit" className="login-button">
+                        Login
+                    </button>
+                </form>
             </div>
-          </div>
-
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ marginBottom: '8px', display: 'block', color: '#495057' }}>User Name</label>
-            <input
-              type="username"
-              style={{
-                width: '100%',
-                padding: '10px',
-                fontSize: '16px',
-                border: '1px solid #ced4da',
-                borderRadius: '4px',
-                boxSizing: 'border-box'
-              }}
-              placeholder="Enter name"
-              value={username}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-
-          <div style={{ marginBottom: '16px' }}>
-            <label style={{ marginBottom: '8px', display: 'block', color: '#495057' }}>Password</label>
-            <input
-              type="password"
-              style={{
-                width: '100%',
-                padding: '10px',
-                fontSize: '16px',
-                border: '1px solid #ced4da',
-                borderRadius: '4px',
-                boxSizing: 'border-box'
-              }}
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr' }}>
-            <button
-              type="submit"
-              style={{
-                backgroundColor: '#007bff',
-                borderColor: '#007bff',
-                color: '#fff',
-                padding: '10px',
-                fontSize: '18px',
-                borderRadius: '4px',
-                transition: 'background-color 0.3s ease',
-                cursor: 'pointer'
-              }}
-            >
-              Submit
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+            <ToastContainer autoClose={2000} />
+        </div>
+    );
 }
