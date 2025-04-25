@@ -10,6 +10,7 @@ import ProtectedRoute from "./component/ProtectedRoute";
 import Admin from "./component/Admin/Admindashboard";
 import AddRole from "./component/Admin/addrole"
 import { UserProvider } from "./component/Auth/UseContext";
+import '@coreui/coreui/dist/css/coreui.min.css';
 
 const Main = () => {
     return (
