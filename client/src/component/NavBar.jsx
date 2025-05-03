@@ -17,7 +17,7 @@ const NavBar = () => {
         toast.success("Successfully logged out!", { position: "top-center" });
         setTimeout(() => {
             setUser(null); // Clear user context
-        }, 2000);
+        }, 1000);
     };
 
     const navItems = [
@@ -38,8 +38,8 @@ const NavBar = () => {
         <div className="nav-Bar">
             <div className="logo">
                 <Link to="/" className="nav-link">
-                    <img src="/dcirs.png" alt="SRV Groups" className="logo-image" />
-                    SRV Groups
+                    <img src="/dcirs.png" alt="onesrv" className="logo-image" />
+                    OneSRV
                 </Link>
             </div>
             <div className="nav-list">

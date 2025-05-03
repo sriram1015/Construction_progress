@@ -1,122 +1,79 @@
-/* General NavBar container styling */
-.nav-Bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
+/* General container styling */
+.app-container {
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+/* Title styling */
+.app-title {
+    padding-top: 50px;
+    text-align: center;
+    font-size: 2.5rem;
+    color: rgb(106, 17, 203);
+    display: inline-block;
     width: 100%;
-    height: 5vh;
-    background-color: #007bff; /* Primary blue background */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 30px;
-    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
-    color: #fff;
-    z-index: 1000;
-    transition: all 0.3s ease;
+    position: relative;
+    background: linear-gradient(90deg, rgb(106, 17, 203), rgb(37, 117, 252)) text;
+    
+}
+.app-title::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translate(-50%);
+    width: 400px;
+    height: 3px;
+    background: linear-gradient(90deg, rgb(106, 17, 203), rgb(37, 117, 252));
+    border-radius: 3px;
+    ;
 }
 
-/* Logo styling */
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #ffffff;
-    text-decoration: none;
-}
 
-.logo-image {
-    height: 30px;
-    width: 30px;
-    object-fit: contain;
-}
-
-/* Navigation list container */
-.nav-list {
-    display: flex;
+/* Construction types container */
+.construction-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
 }
 
-/* Individual nav item container */
-.nav-item {
-    display: flex;
-    align-items: center;
-}
-
-/* Link styling */
-.nav-link {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+/* Individual construction card */
+.construction-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-decoration: none;
-    color: #ffffff;
-    background-color: #f8f9fa;
-    font-size: 15px;
-    font-weight: 500;
-    padding: 8px 12px;
-    border-radius: 6px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    color: #333;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Hover effect for links */
-.nav-link:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-    color: #ffffff;
+/* Hover effect for cards */
+.construction-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* Icon styling */
-.nav-icon {
-    font-size: 18px;
+.construction-icon {
+    font-size: 40px;
+    color: #007bff;
+    margin-bottom: 10px;
 }
 
-/* Button-style nav links */
-button.nav-link {
-    background: none;
-    border: none;
-    color: #ffffff;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    font-size: 15px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-button.nav-link:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-}
-
-/* Responsive design for smaller screens */
-@media (max-width: 768px) {
-    .navBar {
-        flex-direction: column;
-        height: auto;
-        padding: 15px;
-    }
-
-    .nav-list {
-        flex-direction: column;
-        gap: 12px;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .logo {
-        margin-bottom: 10px;
-        justify-content: center;
-    }
-
-    .nav-link {
-        width: 100%;
-        text-align: center;
-    }
+/* Name styling */
+.construction-name {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
 }
