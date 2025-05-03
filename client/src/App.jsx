@@ -39,8 +39,8 @@ const App = () => {
       <div>
         <Carousel />
       </div>
-      <h2 className="app-title">Construction Departments</h2>
-
+      <h2 className="app-title">Construction Departments </h2>
+        
       <div className="construction-types">
 
         {constructionTypes.map((type) => (
