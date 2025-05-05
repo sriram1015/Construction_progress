@@ -37,8 +37,15 @@ def predict():
         filepath = os.path.join(basepath, 'uploads', f.filename)
         f.save(filepath)
 
-        img = image.load_img(filepath, target_size=(224, 224))  
+        print(f"Saved file at: {filepath}")
+
+        try:
+            img = image.load_img(filepath, target_size=(224, 224))
+        except Exception as e:
+            print(f"Error loading image: {e}")
+            raise
         x = image.img_to_array(img)
+        
         x = np.expand_dims(x, axis=0)
 
         y = model.predict(x)
@@ -48,12 +55,19 @@ def predict():
         predicted_stage = stages[preds[0]]
         last_record = collection.find_one({'prediction': predicted_stage }, sort=[('_id', -1)])
         if last_record:
-            filepath1 = os.path.join(basepath, 'uploads', last_record['filename'])
-            percent = similarity(preds[0], filepath1, filepath)
-            percent=percent+last_record['similarity']
-            if(percent>100):
-                percent=100
-
+            try:
+                filepath1 = os.path.join(basepath, 'uploads', last_record['filename'])
+                if not os.path.exists(filepath1):
+                    print(f"Previous file missing: {filepath1}")
+                    raise FileNotFoundError(f"Previous file not found: {filepath1}")
+                
+                percent = similarity(preds[0], filepath1, filepath)
+                percent += last_record['similarity']
+                if percent > 100:
+                    percent = 100
+            except Exception as e:
+                print(f"Error during similarity calculation: {e}")
+                percent = 0
         else:
             percent = 0
 
