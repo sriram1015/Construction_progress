@@ -44,7 +44,7 @@ const App = () => {
       <div className="construction-types">
 
         {constructionTypes.map((type) => (
-          <Link to="/" key={type.id} className="construction-card">
+          <Link to={`/depart/${type.id}`} key={type.id} className="construction-card">
             <div className="construction-icon">{type.icon}</div>
             <div className="construction-name">{type.name}</div>
           </Link>

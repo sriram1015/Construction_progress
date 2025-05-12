@@ -5,4 +5,4 @@ pymongo
 python-dotenv
 flask_cors
 tensorflow
-pillow
+pillowpython3 -m pip list
