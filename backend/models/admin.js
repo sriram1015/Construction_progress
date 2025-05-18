@@ -1,5 +1,3 @@
-const { adminDB } = require('../config/admindb');
-
 
 const mongoose = require('mongoose'); // Import mongoose
 

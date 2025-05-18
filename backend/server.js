@@ -2,10 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const connectDB = require('./config/db'); // Regular user DB connection
-const { connectAdminDB } = require('./config/admindb'); // Admin DB connection
+//const { connectAdminDB } = require('./config/admindb'); // Admin DB connection
 const authRoutes = require('./routes/auth');
 const addrole = require('./routes/addrole');
-
+const profile = require('./routes/Profile');
 const app = express();
 const port = 5001;
 
@@ -15,13 +15,13 @@ app.use(cors());
 
 // Connect to both databases
 connectDB(); // For regular users
-connectAdminDB(); // For admin users
+//connectAdminDB(); // For admin users
 
 
 // Use authentication routes
 app.use('/auth', authRoutes);
 app.use('/add', addrole);
-
+app.use('/profile', profile);
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}.....✅`);
 });
