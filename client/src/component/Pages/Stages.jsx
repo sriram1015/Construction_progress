@@ -105,7 +105,8 @@ function Stages() {
     const formData = new FormData();
     formData.append('image', file);
     formData.append('selectedStage', selectedStage);
-
+    formData.append('username', user.username); // Pass the logged-in user's username
+    formData.append('title', title); // Pass the role title
     try {
       const response = await axios.post(`${flask_url}/predict`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
