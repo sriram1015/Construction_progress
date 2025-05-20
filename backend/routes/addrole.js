@@ -97,4 +97,36 @@ router.get('/roles/user', async (req, res) => {
     }
 });
 
+router.put('/role/updatestage', async (req, res) => {
+    const { roleId, stage, value } = req.body;
+
+    if (!roleId || !stage) {
+        return res.status(400).json({ error: 'roleId and stage are required.' });
+    }
+
+    try {
+        // Use dot notation to update the specific stage in stageContent
+        const update = {};
+        update[`stageContent.${stage}`] = value;
+
+        const updatedRole = await Role.findByIdAndUpdate(
+            roleId,
+            { $set: update },
+            { new: true }
+        );
+
+        if (!updatedRole) {
+            return res.status(404).json({ error: 'Role not found.' });
+        }
+
+        res.json({ message: 'Stage updated successfully.', role: updatedRole });
+    } catch (err) {
+        console.error('Error updating stage:', err);
+        res.status(500).json({ error: 'Failed to update stage.' });
+    }
+});
+
+
+
+
 module.exports = router;

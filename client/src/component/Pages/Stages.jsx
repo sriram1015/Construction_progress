@@ -77,7 +77,7 @@ function Stages() {
           const stageTasks = tasks.filter((task) => task.stage === stage.stage);
           rate[stage.stage] = stageTasks.length;
           completedTasks += stageTasks.length;
-          
+
           // Calculate total similarity for progress percentage
           stageTasks.forEach(task => {
             const similarityMatch = task.text.match(/Progress: (\d+)%/);
@@ -93,7 +93,7 @@ function Stages() {
 
       setProgressionRate(rate);
       setTotalTasksCompleted(completedTasks);
-      
+
       // Calculate average progress percentage
       const avgProgress = tasks.length > 0 ? (totalSimilarity / tasks.length) : 0;
       setTotalProgressPercentage(avgProgress.toFixed(1));
@@ -127,6 +127,8 @@ function Stages() {
     const formData = new FormData();
     formData.append('image', file);
     formData.append('selectedStage', selectedStage);
+    formData.append('username', user.username);
+    formData.append('title', title);
 
     try {
       const response = await axios.post(`${flask_url}/predict`, formData, {
@@ -149,10 +151,28 @@ function Stages() {
         };
         setTasks([...tasks, newTask]);
 
+
+        const currentRole = roles.find(role =>
+          role.stageContent.some(stage => stage.stage === selectedStage)
+        );
+        const roleId = currentRole ? currentRole.id : null;
+
+        if (roleId) {
+          try {
+            await axios.put(`${node_url}/add/role/updatestage`, {
+              roleId,
+              stage: selectedStage,
+              value: similarity // or whatever value you want to store
+            });
+          } catch (err) {
+            toast.error('Failed to update stage in database.', { position: 'top-center', autoClose: 2000 });
+          }
+        }
         toast.success('Prediction successful!', { position: 'top-center', autoClose: 2000 });
       } else {
         toast.error('The image does not match the selected stage.', { position: 'top-center', autoClose: 2000 });
       }
+
     } catch (error) {
       console.error('Error during prediction:', error);
       toast.error('Prediction failed. Please try again.', { position: 'top-center', autoClose: 2000 });
@@ -170,12 +190,12 @@ function Stages() {
   const closeImageModal = () => {
     setModalImage(null);
   };
-  const uppertitle= title.charAt(0).toUpperCase() + title.slice(1);
+  const uppertitle = title.charAt(0).toUpperCase() + title.slice(1);
   return (
     <div className="main-container">
       <div className='header'>
-        
-      <h3 className="project-title">{uppertitle || 'Construction Progress Tracker'}</h3>
+
+        <h3 className="project-title">{uppertitle || 'Construction Progress Tracker'}</h3>
 
         <div className="header-content">
           <div className="user-info">
@@ -193,7 +213,7 @@ function Stages() {
       <div className="side-nav">
         {roles.map((role, index) => (
           <div key={index}>
-          
+
             {role.stageContent.map((stage, idx) => (
               <button
                 key={idx}
@@ -221,10 +241,10 @@ function Stages() {
           {preview && (
             <div className="preview-section">
               <h3>Image Preview:</h3>
-              <img 
-                src={preview} 
-                alt="Selected file preview" 
-                className="preview-image" 
+              <img
+                src={preview}
+                alt="Selected file preview"
+                className="preview-image"
                 onClick={() => openImageModal(preview)}
               />
             </div>
@@ -260,8 +280,8 @@ function Stages() {
           {tasks.length > 0 ? (
             tasks.map((task) => (
               <li key={task.id} className="task-item">
-                <span 
-                  onClick={() => openImageModal(task.image)} 
+                <span
+                  onClick={() => openImageModal(task.image)}
                   className="task-image-icon"
                   title="View image"
                 >
