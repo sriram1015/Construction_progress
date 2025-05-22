@@ -77,8 +77,6 @@ function Stages() {
           const stageTasks = tasks.filter((task) => task.stage === stage.stage);
           rate[stage.stage] = stageTasks.length;
           completedTasks += stageTasks.length;
-
-          // Calculate total similarity for progress percentage
           stageTasks.forEach(task => {
             const similarityMatch = task.text.match(/Progress: (\d+)%/);
             if (similarityMatch) {
@@ -189,12 +187,14 @@ function Stages() {
   const closeImageModal = () => {
     setModalImage(null);
   };
+
   const uppertitle = title.charAt(0).toUpperCase() + title.slice(1);
   return (
     <div className="main-container">
       <div className='header'>
 
         <h3 className="project-title">{uppertitle || 'Construction Progress Tracker'}</h3>
+
 
         <div className="header-content">
           <div className="user-info">
@@ -212,7 +212,6 @@ function Stages() {
       <div className="side-nav">
         {roles.map((role, index) => (
           <div key={index}>
-
             {role.stageContent.map((stage, idx) => (
               <button
                 key={idx}
@@ -240,10 +239,12 @@ function Stages() {
           {preview && (
             <div className="preview-section">
               <h3>Image Preview:</h3>
+
               <img
                 src={preview}
                 alt="Selected file preview"
                 className="preview-image"
+
                 onClick={() => openImageModal(preview)}
               />
             </div>
@@ -281,6 +282,7 @@ function Stages() {
               <li key={task.id} className="task-item">
                 <span
                   onClick={() => openImageModal(task.image)}
+
                   className="task-image-icon"
                   title="View image"
                 >
