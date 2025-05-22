@@ -38,11 +38,13 @@ def predict():
         if not f:
             return jsonify({'error': 'No file uploaded'}), 400
         
+
         img_data = f.read()  # Read the image file content
         
-        # Now you can process the image like you did before
         img = image.load_img(BytesIO(img_data), target_size=(224, 224))
+
         x = image.img_to_array(img)
+        
         x = np.expand_dims(x, axis=0)
 
         y = model.predict(x)
@@ -60,7 +62,6 @@ def predict():
                 if percent > 100:
                     percent = 100
             except Exception as e:
-                # You can log the error or handle it as needed
                 print(f"Error processing similarity: {e}")
         else:
             percent = 0

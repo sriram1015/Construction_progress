@@ -1,28 +1,31 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
-import { UserContext } from '../Auth/UseContext'; // Import UserContext
+import { UserContext } from '../Auth/UseContext';
 import 'react-toastify/dist/ReactToastify.css';
 import './Stage.css';
 
 const node_url = import.meta.env.VITE_NODE_URL;
 const flask_url = import.meta.env.VITE_FLASK_URL;
+
 function Stages() {
-  const { user } = useContext(UserContext); // Access logged-in user details
-  const [roles, setRoles] = useState([]); // Roles assigned to the user
-  const [selectedStage, setSelectedStage] = useState(''); // Selected stage
-  const [title, setTitle] = useState(''); // Role title
-  const [file, setFile] = useState(null); // File input state
-  const [preview, setPreview] = useState(null); // Image preview
-  const [isLoading, setIsLoading] = useState(false); // Loading state for prediction
-  const [prediction, setPrediction] = useState(null); // Prediction result
-  const [similarity, setSimilarity] = useState(null); // Similarity percentage
+  const { user } = useContext(UserContext);
+  const [roles, setRoles] = useState([]);
+  const [selectedStage, setSelectedStage] = useState('');
+  const [title, setTitle] = useState('');
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [prediction, setPrediction] = useState(null);
+  const [similarity, setSimilarity] = useState(null);
   const [tasks, setTasks] = useState(() => {
     const savedTasks = sessionStorage.getItem('tasks');
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
-  const [progressionRate, setProgressionRate] = useState({}); // Progression rate for each stage
-  const [modalImage, setModalImage] = useState(null); // Modal for image preview
+  const [progressionRate, setProgressionRate] = useState({});
+  const [modalImage, setModalImage] = useState(null);
+  const [totalTasksCompleted, setTotalTasksCompleted] = useState(0);
+  const [totalProgressPercentage, setTotalProgressPercentage] = useState(0);
 
   // Save tasks and other data to sessionStorage whenever they change
   useEffect(() => {
@@ -42,12 +45,10 @@ function Stages() {
 
       try {
         const response = await axios.get(`${node_url}/add/roles/user`, {
-          params: { username: user.username }, // Pass the logged-in user's username
+          params: { username: user.username },
         });
-        console.log('Fetched User Roles:', response.data); // Debugging log
         setRoles(response.data);
 
-        // Set the first role and stage as default if available
         if (response.data.length > 0) {
           setTitle(response.data[0].title);
           if (response.data[0].stageContent.length > 0) {
@@ -61,23 +62,44 @@ function Stages() {
     };
 
     fetchUserRoles();
-  }, [user]); // Re-run when the logged-in user changes
+  }, [user]);
 
-  // Update progression rate whenever tasks change
+  // Update progression metrics whenever tasks change
   useEffect(() => {
-    const calculateProgressionRate = () => {
+    const calculateProgressionMetrics = () => {
       const rate = {};
+      let totalTasks = 0;
+      let completedTasks = 0;
+      let totalSimilarity = 0;
+
       roles.forEach((role) => {
         role.stageContent.forEach((stage) => {
           const stageTasks = tasks.filter((task) => task.stage === stage.stage);
-          const completedTasks = stageTasks.length;
-          rate[stage.stage] = completedTasks; // Store the progression rate for each stage
+          rate[stage.stage] = stageTasks.length;
+          completedTasks += stageTasks.length;
+
+          // Calculate total similarity for progress percentage
+          stageTasks.forEach(task => {
+            const similarityMatch = task.text.match(/Progress: (\d+)%/);
+            if (similarityMatch) {
+              totalSimilarity += parseInt(similarityMatch[1], 10);
+            }
+          });
         });
       });
+
+      // Calculate total possible tasks (assuming each stage should have at least one task)
+      const totalPossibleTasks = roles.reduce((acc, role) => acc + role.stageContent.length, 0);
+
       setProgressionRate(rate);
+      setTotalTasksCompleted(completedTasks);
+
+      // Calculate average progress percentage
+      const avgProgress = tasks.length > 0 ? (totalSimilarity / tasks.length) : 0;
+      setTotalProgressPercentage(avgProgress.toFixed(1));
     };
 
-    calculateProgressionRate();
+    calculateProgressionMetrics();
   }, [tasks, roles]);
 
   // Handle file input change
@@ -87,7 +109,7 @@ function Stages() {
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      setPreview(reader.result); // Set the preview image
+      setPreview(reader.result);
     };
     if (selectedFile) {
       reader.readAsDataURL(selectedFile);
@@ -101,12 +123,12 @@ function Stages() {
       return;
     }
 
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
     const formData = new FormData();
     formData.append('image', file);
     formData.append('selectedStage', selectedStage);
-    formData.append('username', user.username); // Pass the logged-in user's username
-    formData.append('title', title); // Pass the role title
+    formData.append('username', user.username);
+    formData.append('title', title);
     try {
       const response = await axios.post(`${flask_url}/predict`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -128,15 +150,33 @@ function Stages() {
         };
         setTasks([...tasks, newTask]);
 
+
+        const currentRole = roles.find(role =>
+          role.stageContent.some(stage => stage.stage === selectedStage)
+        );
+        const roleId = currentRole ? currentRole.id : null;
+
+        if (roleId) {
+          try {
+            await axios.put(`${node_url}/add/role/updatestage`, {
+              roleId,
+              stage: selectedStage,
+              value: similarity // or whatever value you want to store
+            });
+          } catch (err) {
+            toast.error('Failed to update stage in database.', { position: 'top-center', autoClose: 2000 });
+          }
+        }
         toast.success('Prediction successful!', { position: 'top-center', autoClose: 2000 });
       } else {
         toast.error('The image does not match the selected stage.', { position: 'top-center', autoClose: 2000 });
       }
+
     } catch (error) {
       console.error('Error during prediction:', error);
       toast.error('Prediction failed. Please try again.', { position: 'top-center', autoClose: 2000 });
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     }
   };
 
@@ -149,72 +189,113 @@ function Stages() {
   const closeImageModal = () => {
     setModalImage(null);
   };
-
+  const uppertitle = title.charAt(0).toUpperCase() + title.slice(1);
   return (
     <div className="main-container">
-      <div className="side-nav">
-      <div>
-      <h3>{title}</h3>
+      <div className='header'>
 
-      <h4>Logged in as: {user?.username || 'Guest'}</h4> 
+        <h3 className="project-title">{uppertitle || 'Construction Progress Tracker'}</h3>
+
+        <div className="header-content">
+          <div className="user-info">
+            <h4 className="username">Logged in as: {user?.username || 'Guest'}</h4>
+            <div className="progress-summary">
+              <p className='progress1'>Total Tasks Completed:</p>
+              <span className='progress2'> {totalTasksCompleted}</span>
+              <p className='progress3'>Overall Progress:</p>
+              <span className='progress4'> {totalProgressPercentage}%</span>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <div className="side-nav">
         {roles.map((role, index) => (
           <div key={index}>
+
             {role.stageContent.map((stage, idx) => (
               <button
                 key={idx}
                 className={`nav-button ${selectedStage === stage.stage ? 'active' : ''}`}
                 onClick={() => setSelectedStage(stage.stage)}
               >
-                {stage.stage} - Progress: {progressionRate[stage.stage] || 0} tasks
+                <span className="stage-name">{stage.stage}</span>
+                <span className="stage-progress">Progress: {progressionRate[stage.stage] || 0} tasks</span>
               </button>
             ))}
           </div>
         ))}
       </div>
 
-      {/* Content for Selected Stage */}
       <div className="predictcontent">
         <h1>{selectedStage || 'Select a Stage'}</h1>
         <div className="predict-form-container">
-          <input type="file" id="fileInput" onChange={onFileChange} accept="image/*" />
-          <label htmlFor="fileInput" className="upload-button">Upload Image</label>
+          <div className="form-group">
+            <input type="file" id="fileInput" onChange={onFileChange} accept="image/*" />
+            <label htmlFor="fileInput" className="upload-button">
+              {file ? 'Change Image' : 'Upload Image'}
+            </label>
+          </div>
 
           {preview && (
-            <div>
+            <div className="preview-section">
               <h3>Image Preview:</h3>
-              <img src={preview} alt="Selected file preview" className="preview-image" />
+              <img
+                src={preview}
+                alt="Selected file preview"
+                className="preview-image"
+                onClick={() => openImageModal(preview)}
+              />
             </div>
           )}
 
-          <button onClick={onPredict} className="predict-button" disabled={isLoading}>
-            {isLoading ? 'Predicting...' : 'Predict'}
+          <button onClick={onPredict} className="predict-button" disabled={isLoading || !file}>
+            {isLoading ? (
+              <>
+                <span className="spinner"></span>
+                Predicting...
+              </>
+            ) : 'Predict'}
           </button>
 
           {prediction && similarity !== null && (
-            <div>
+            <div className="results-section">
               <h3>Prediction Result:</h3>
-              <p>{prediction} - {similarity}%</p>
+              <p>
+                <strong>Stage:</strong> {prediction} <br />
+                <strong>Progress:</strong> {similarity}%
+              </p>
             </div>
           )}
         </div>
       </div>
 
-      {/* Progression Rate */}
       <div className="todo-list">
-        <h2>Progression Rate:</h2>
-        <ul>
-          {tasks.map((task) => (
-            <li key={task.id}>
-              <span onClick={() => openImageModal(task.image)} className="task-image-icon">🖼️</span>
-              <span>{task.text}</span>
-              <span className="task-timestamp">{task.timestamp}</span>
-            </li>
-          ))}
+        <div className="todo-header">
+          <h2>Task History</h2>
+          <div className="task-count">{tasks.length} tasks recorded</div>
+        </div>
+        <ul className="task-list">
+          {tasks.length > 0 ? (
+            tasks.map((task) => (
+              <li key={task.id} className="task-item">
+                <span
+                  onClick={() => openImageModal(task.image)}
+                  className="task-image-icon"
+                  title="View image"
+                >
+                  🖼️
+                </span>
+                <span className="task-text">{task.text}</span>
+                <span className="task-timestamp">{task.timestamp}</span>
+              </li>
+            ))
+          ) : (
+            <li className="no-tasks">No tasks recorded yet</li>
+          )}
         </ul>
       </div>
 
-      {/* Modal for Image Preview */}
       {modalImage && (
         <div className="modal" onClick={closeImageModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
