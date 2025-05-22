@@ -11,6 +11,7 @@ import Admin from "./component/Admin/Admindashboard";
 import AddRole from "./component/Admin/addrole"
 import { UserProvider } from "./component/Auth/UseContext";
 import '@coreui/coreui/dist/css/coreui.min.css';
+import DepartmentDetail from "./DepartmentDetail";
 
 const Main = () => {
     return (
@@ -19,6 +20,7 @@ const Main = () => {
                 <NavBar />
                 <Routes>
                     <Route path="/" element={<App />} />
+                    <Route path="/depart/:id" element={<DepartmentDetail />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/admin" element={<Admin />} />

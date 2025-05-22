@@ -3,10 +3,14 @@ import numpy as np
 
 #orb feature mapping
 
-def similarity(s,img1,img2):
+def similarity(s,img1_stream,img2_stream):
     
-    img1 = cv2.imread(img1)
-    img2 = cv2.imread(img2)
+    img1_array = np.frombuffer(img1_stream.read(), np.uint8)
+    img2_array = np.frombuffer(img2_stream.read(), np.uint8)
+
+    img1 = cv2.imdecode(img1_array, cv2.IMREAD_COLOR)
+    img2 = cv2.imdecode(img2_array, cv2.IMREAD_COLOR)
+
 
     if img1 is None:
         print("Error: Couldn't load previous_day_image.jpg")

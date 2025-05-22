@@ -14,38 +14,37 @@ const Carousel = () => {
         <CCarouselItem>
           <CImage className="d-block w-100" src="housing.jpg" alt="slide 1" />
           <CCarouselCaption className="d-none d-md-block">
-            <h5>First Slide</h5>
-            <p>Description of the first slide.</p>
+            
           </CCarouselCaption>
         </CCarouselItem>
 
         <CCarouselItem>
-          <CImage className="d-block w-100" src="dcirs.avif" alt="slide 2" />
+          <CImage className="d-block w-100" src="education.jpg" alt="slide 2" />
           <CCarouselCaption className="d-none d-md-block">
-            <h5>Second Slide</h5>
-            <p>Description of the second slide.</p>
+            <h5 style={{color:"#fff"}}>Higher education</h5>
+            <p style={{color: "#fff"}}>Oversees the development, regulation, and quality assurance of universities and colleges to promote advanced learning and research.</p>
           </CCarouselCaption>
         </CCarouselItem>
 
         <CCarouselItem>
-          <CImage className="d-block w-100" src="dws.jpg" alt="slide 3" />
+          <CImage className="d-block w-100" src="health.jpeg" alt="slide 3" />
           <CCarouselCaption className="d-none d-md-block">
-            <h5>Third Slide</h5>
-            <p>Description of the third slide.</p>
+            <h5 style={{color:"#fff"}}>Health Care</h5>
+            <p style={{color:"#fff"}}>Manages public health systems, medical services, and infrastructure to provide accessible and quality healthcare for all.</p>
           </CCarouselCaption>
         </CCarouselItem>
         <CCarouselItem>
           <CImage className="d-block w-100" src="transport.jpeg" alt="slide 3" />
           <CCarouselCaption className="d-none d-md-block">
-            <h5>Third Slide</h5>
-            <p>Description of the third slide.</p>
+            <h5 style={{color:"#fff"}}>High Ways</h5>
+            <p style={{color:"#fff"}}>Plans, constructs, and maintains road networks to ensure efficient, safe, and sustainable transportation infrastructure.</p>
           </CCarouselCaption>
         </CCarouselItem>
         <CCarouselItem>
           <CImage className="d-block w-100" src="rural.webp" alt="slide 3" />
           <CCarouselCaption className="d-none d-md-block">
-            <h5>Third Slide</h5>
-            <p>Description of the third slide.</p>
+            <h5 style={{color:"#fff"}}>Transport</h5>
+            <p style={{color:"#fff"}}> Regulates and develops urban and regional transport systems to ensure efficient mobility and reduce congestion.</p>
           </CCarouselCaption>
         </CCarouselItem>
       </CCarousel>
