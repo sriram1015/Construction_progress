@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Connect to both databases
-connectDB(); s
+connectDB(); 
 
 
 // Use authentication routes
