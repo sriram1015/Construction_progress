@@ -129,7 +129,6 @@ function Stages() {
     formData.append('selectedStage', selectedStage);
     formData.append('username', user.username);
     formData.append('title', title);
-
     try {
       const response = await axios.post(`${flask_url}/predict`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
