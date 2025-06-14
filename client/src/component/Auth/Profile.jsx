@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { UserContext } from "./UseContext";
 import "./Profile.css";
-
+import Listdata from "../Pages/listdata"
 const node_url = import.meta.env.VITE_NODE_URL;
 
 const Profile = () => {
@@ -114,6 +114,7 @@ const Profile = () => {
                     </div>
                 )}
             </div>
+                <Listdata />
         </div>
     );
 };

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
-import { UserContext } from '../Auth/UseContext';
+import { useLocation } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import './Stage.css';
 
@@ -9,10 +9,11 @@ const node_url = import.meta.env.VITE_NODE_URL;
 const flask_url = import.meta.env.VITE_FLASK_URL;
 
 function Stages() {
-  const { user } = useContext(UserContext);
-  const [roles, setRoles] = useState([]);
+  const location = useLocation();
+  const job = location.state?.job || JSON.parse(sessionStorage.getItem('selectedJob') || 'null');
+  const [stageContent, setStageContent] = useState([]);
   const [selectedStage, setSelectedStage] = useState('');
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState(job?.title || '');
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +28,12 @@ function Stages() {
   const [totalTasksCompleted, setTotalTasksCompleted] = useState(0);
   const [totalProgressPercentage, setTotalProgressPercentage] = useState(0);
 
-  // Save tasks and other data to sessionStorage whenever they change
+  useEffect(() => {
+    if (location.state?.job) {
+      sessionStorage.setItem('selectedJob', JSON.stringify(location.state.job));
+    }
+  }, [location.state]);
+
   useEffect(() => {
     sessionStorage.setItem('tasks', JSON.stringify(tasks));
     sessionStorage.setItem('prediction', prediction);
@@ -35,74 +41,59 @@ function Stages() {
     sessionStorage.setItem('preview', preview);
   }, [tasks, prediction, similarity, preview]);
 
-  // Fetch roles assigned to the logged-in user
   useEffect(() => {
-    const fetchUserRoles = async () => {
-      if (!user) {
-        toast.error('Please log in to view your stages.', { position: 'top-center', autoClose: 2000 });
-        return;
-      }
-
+    if (!job || !job.username || !job.title) {
+      setStageContent([]);
+      setTitle('');
+      setSelectedStage('');
+      return;
+    }
+    const fetchStages = async () => {
       try {
-        const response = await axios.get(`${node_url}/add/roles/user`, {
-          params: { username: user.username },
+        const response = await axios.get(`${node_url}/user/job/stages`, {
+          params: { username: job.username, title: job.title },
         });
-        setRoles(response.data);
-
-        if (response.data.length > 0) {
-          setTitle(response.data[0].title);
-          if (response.data[0].stageContent.length > 0) {
-            setSelectedStage(response.data[0].stageContent[0].stage);
-          }
+        setStageContent(response.data.stageContent || []);
+        setTitle(job.title);
+        if (response.data.stageContent && response.data.stageContent.length > 0) {
+          setSelectedStage(response.data.stageContent[0].stage);
+        } else {
+          setSelectedStage('');
         }
       } catch (error) {
-        console.error('Error fetching user roles:', error);
-        toast.error('Failed to load roles for the logged-in user.', { position: 'top-center', autoClose: 2000 });
+        setStageContent([]);
+        setSelectedStage('');
+        toast.error('Failed to load stages for this job.', { position: 'top-center', autoClose: 2000 });
       }
     };
+    fetchStages();
+  }, [job]);
 
-    fetchUserRoles();
-  }, [user]);
-
-  // Update progression metrics whenever tasks change
   useEffect(() => {
-    const calculateProgressionMetrics = () => {
-      const rate = {};
-      let totalTasks = 0;
-      let completedTasks = 0;
-      let totalSimilarity = 0;
+    const rate = {};
+    let completedTasks = 0;
+    let totalSimilarity = 0;
 
-      roles.forEach((role) => {
-        role.stageContent.forEach((stage) => {
-          const stageTasks = tasks.filter((task) => task.stage === stage.stage);
-          rate[stage.stage] = stageTasks.length;
-          completedTasks += stageTasks.length;
+    stageContent.forEach((stage) => {
+      const stageTasks = tasks.filter((task) => task.stage === stage.stage);
+      rate[stage.stage] = stageTasks.length;
+      completedTasks += stageTasks.length;
 
-          // Calculate total similarity for progress percentage
-          stageTasks.forEach(task => {
-            const similarityMatch = task.text.match(/Progress: (\d+)%/);
-            if (similarityMatch) {
-              totalSimilarity += parseInt(similarityMatch[1], 10);
-            }
-          });
-        });
+      stageTasks.forEach(task => {
+        const similarityMatch = task.text.match(/Progress: (\d+)%/);
+        if (similarityMatch) {
+          totalSimilarity += parseInt(similarityMatch[1], 10);
+        }
       });
+    });
 
-      // Calculate total possible tasks (assuming each stage should have at least one task)
-      const totalPossibleTasks = roles.reduce((acc, role) => acc + role.stageContent.length, 0);
+    setProgressionRate(rate);
+    setTotalTasksCompleted(completedTasks);
 
-      setProgressionRate(rate);
-      setTotalTasksCompleted(completedTasks);
+    const avgProgress = tasks.length > 0 ? (totalSimilarity / tasks.length) : 0;
+    setTotalProgressPercentage(avgProgress.toFixed(1));
+  }, [tasks, stageContent]);
 
-      // Calculate average progress percentage
-      const avgProgress = tasks.length > 0 ? (totalSimilarity / tasks.length) : 0;
-      setTotalProgressPercentage(avgProgress.toFixed(1));
-    };
-
-    calculateProgressionMetrics();
-  }, [tasks, roles]);
-
-  // Handle file input change
   const onFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
@@ -116,7 +107,6 @@ function Stages() {
     }
   };
 
-  // Handle prediction
   const onPredict = async () => {
     if (!file) {
       toast.error('Please select a file first.', { position: 'top-center', autoClose: 2000 });
@@ -127,7 +117,7 @@ function Stages() {
     const formData = new FormData();
     formData.append('image', file);
     formData.append('selectedStage', selectedStage);
-    formData.append('username', user.username);
+    formData.append('username', job.username);
     formData.append('title', title);
 
     try {
@@ -151,23 +141,6 @@ function Stages() {
         };
         setTasks([...tasks, newTask]);
 
-
-        const currentRole = roles.find(role =>
-          role.stageContent.some(stage => stage.stage === selectedStage)
-        );
-        const roleId = currentRole ? currentRole.id : null;
-
-        if (roleId) {
-          try {
-            await axios.put(`${node_url}/add/role/updatestage`, {
-              roleId,
-              stage: selectedStage,
-              value: similarity // or whatever value you want to store
-            });
-          } catch (err) {
-            toast.error('Failed to update stage in database.', { position: 'top-center', autoClose: 2000 });
-          }
-        }
         toast.success('Prediction successful!', { position: 'top-center', autoClose: 2000 });
       } else {
         toast.error('The image does not match the selected stage.', { position: 'top-center', autoClose: 2000 });
@@ -181,25 +154,40 @@ function Stages() {
     }
   };
 
-  // Open image modal
   const openImageModal = (image) => {
     setModalImage(image);
   };
 
-  // Close image modal
   const closeImageModal = () => {
     setModalImage(null);
   };
-  const uppertitle = title.charAt(0).toUpperCase() + title.slice(1);
+
+  const uppertitle = title ? title.charAt(0).toUpperCase() + title.slice(1) : '';
+
+  if (!job || !job.username || !job.title) {
+    return (
+      <div className="text-center mt-10">
+        No job selected. Please go back and select a job from your list.
+      </div>
+    );
+  }
+
+  if (!stageContent.length) {
+    return (
+      <div className="text-center mt-10">
+        No stages found for this job.
+        <ToastContainer autoClose={2000} />
+      </div>
+    );
+  }
+
   return (
     <div className="main-container">
       <div className='header'>
-
         <h3 className="project-title">{uppertitle || 'Construction Progress Tracker'}</h3>
-
         <div className="header-content">
           <div className="user-info">
-            <h4 className="username">Logged in as: {user?.username || 'Guest'}</h4>
+            <h4 className="username">Logged in as: {job?.username || 'Guest'}</h4>
             <div className="progress-summary">
               <p className='progress1'>Total Tasks Completed:</p>
               <span className='progress2'> {totalTasksCompleted}</span>
@@ -211,20 +199,15 @@ function Stages() {
       </div>
 
       <div className="side-nav">
-        {roles.map((role, index) => (
-          <div key={index}>
-
-            {role.stageContent.map((stage, idx) => (
-              <button
-                key={idx}
-                className={`nav-button ${selectedStage === stage.stage ? 'active' : ''}`}
-                onClick={() => setSelectedStage(stage.stage)}
-              >
-                <span className="stage-name">{stage.stage}</span>
-                <span className="stage-progress">Progress: {progressionRate[stage.stage] || 0} tasks</span>
-              </button>
-            ))}
-          </div>
+        {stageContent.map((stage, idx) => (
+          <button
+            key={idx}
+            className={`nav-button ${selectedStage === stage.stage ? 'active' : ''}`}
+            onClick={() => setSelectedStage(stage.stage)}
+          >
+            <span className="stage-name">{stage.stage}</span>
+            <span className="stage-progress">Progress: {progressionRate[stage.stage] || 0} tasks</span>
+          </button>
         ))}
       </div>
 

@@ -12,7 +12,7 @@ import AddRole from "./component/Admin/addrole"
 import { UserProvider } from "./component/Auth/UseContext";
 import '@coreui/coreui/dist/css/coreui.min.css';
 import DepartmentDetail from "./DepartmentDetail";
-
+import Getjob from "./component/Pages/listdata";
 const Main = () => {
     return (
         <UserProvider>
@@ -26,7 +26,15 @@ const Main = () => {
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/addrole" element={<AddRole />} />
                     <Route
-                        path="/stage"
+                        path="/getjob"
+                        element={
+                            <ProtectedRoute>
+                                <Getjob />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/stages"
                         element={
                             <ProtectedRoute>
                                 <Stage />
