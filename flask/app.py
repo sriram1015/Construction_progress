@@ -38,7 +38,6 @@ def predict():
         if not f:
             return jsonify({'error': 'No file uploaded'}), 400
         
-
         img_data = f.read()  # Read the image file content
         
         img = image.load_img(BytesIO(img_data), target_size=(224, 224))
