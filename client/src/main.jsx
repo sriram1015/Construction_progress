@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import Login from "./component/Auth/Login";
 import Profile from "./component/Auth/Profile";
 import Stage from "./component/Pages/Stages";
@@ -18,6 +19,7 @@ const Main = () => {
         <UserProvider>
             <Router>
                 <NavBar />
+                <ToastContainer position="top-right" />
                 <Routes>
                     <Route path="/" element={<App />} />
                     <Route path="/depart/:id" element={<DepartmentDetail />} />

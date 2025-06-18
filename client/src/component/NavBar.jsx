@@ -14,7 +14,7 @@ const NavBar = () => {
     const { user, setUser } = useContext(UserContext); // Access user and setUser from context
 
     const handleLogout = () => {
-        toast.success("Successfully logged out!", { position: "top-center" });
+        toast.success("Successfully logged out!", { position: "top-right" });
         setTimeout(() => {
             setUser(null); // Clear user context
         }, 1000);
@@ -59,7 +59,6 @@ const NavBar = () => {
                     </div>
                 ))}
             </div>
-            <ToastContainer />
         </div>
     );
 };
