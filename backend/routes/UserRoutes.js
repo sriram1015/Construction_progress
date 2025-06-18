@@ -2,6 +2,7 @@ const express = require('express');
 const { loginUser, getuserProfile, getUserjobs } = require('../controller/user.controller');
 const Userrouter = express.Router();
 const Job = require('../models/addrole');
+const { AddRole } = require('../controller/admin.controller');
 Userrouter.post('/login', loginUser);
 Userrouter.get('/profile', getuserProfile);
 Userrouter.get('/job', getUserjobs);

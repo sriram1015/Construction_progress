@@ -37,7 +37,7 @@ export default function Login() {
 
             if (data.status === "ok") {
                 setUser({ username, memberType });
-                toast.success("Login Successful!", { position: "bottom-right" });
+                toast.success("Login Successful!", { position: "top-right" });
 
                 navigate(memberType.toLowerCase() === "assistantengineer" ? "/vill" : "/profile");
             } else {
@@ -59,7 +59,8 @@ export default function Login() {
 
     return (
         <div className="login-container">
-            <ToastContainer />
+            {/* NavBar.jsx */}
+            
             <div className="login-form">
                 <form onSubmit={handleSubmit}>
                     <h1 className="login-title">Login</h1>
