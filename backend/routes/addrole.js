@@ -53,9 +53,8 @@ router.post('/role/addrole', upload.single('image'), async (req, res) => {
         // Create and save the role
         const role = new Role({
             title,
-            image: imagePath,
             stageContent: JSON.parse(stageContent),
-            assignedUser, // Store username directly
+            assignedUser, 
         });
         await role.save();
 

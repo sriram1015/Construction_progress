@@ -11,7 +11,6 @@ const node_url = import.meta.env.VITE_NODE_URL;
 const AddRole = () => {
     const editorEl = useRef(null);
     const [title, setTitle] = useState('');
-    const [image, setImage] = useState(null);
     const [stageContent, setStageContent] = useState({});
     const [assignedUser, setAssignedUser] = useState('');
     const [allUsers, setAllUsers] = useState([]);
@@ -26,7 +25,6 @@ const AddRole = () => {
         'Plinth and building',
         'Lintel',
         'Roofing',
-        'Roofing',
         'Plastering',
         'Flooring',
         'Painting',
@@ -34,7 +32,6 @@ const AddRole = () => {
 
     const clearInputs = () => {
         setTitle('');
-        setImage(null);
         setStageContent({});
         setAssignedUser('');
         if (editorEl.current) {
@@ -43,30 +40,31 @@ const AddRole = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        if (!title || !image || !assignedUser || Object.keys(stageContent).length === 0) {
-            setError('All fields are required.');
-            setTimeout(() => setError(''), 5000);
-            return;
-        }
+    if (!title || !assignedUser || Object.keys(stageContent).length === 0) {
+        setError('All fields are required.');
+        setTimeout(() => setError(''), 5000);
+        return;
+    }
 
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('image', image);
-        formData.append('stageContent', JSON.stringify(stageContent));
-        formData.append('assignedUser', assignedUser);
-
-        try {
-            const { data } = await axios.post(`${node_url}/add/role/addrole`, formData);
-            setSuccess('Role added successfully!');
-            clearInputs();
-            setTimeout(() => setSuccess(''), 7000);
-        } catch (err) {
-            setError(err.response?.data?.error || 'An error occurred.');
-            setTimeout(() => setError(''), 7000);
-        }
-    };
+    try {
+        const { data } = await axios.post(
+            `${node_url}/admin/addrole`,
+            {
+                title,
+                stageContent,
+                assignedUser
+            }
+        );
+        setSuccess('Role added successfully!');
+        clearInputs();
+        setTimeout(() => setSuccess(''), 7000);
+    } catch (err) {
+        setError(err.response?.data?.error || 'An error occurred.');
+        setTimeout(() => setError(''), 7000);
+    }
+};
 
     const addStage = () => {
         if (!selectedStageName) {
@@ -102,17 +100,6 @@ const AddRole = () => {
         }
     };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                setImage(event.target.result); // Store image preview as a data URL
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
     useEffect(() => {
         fetchUsers();
     }, []);
@@ -135,28 +122,6 @@ const AddRole = () => {
                     required
                     aria-label="Role Title"
                 />
-
-                <div className="upload-container">
-                    <div className="role-image-field" onClick={() => document.getElementById("imageInput").click()}>
-                        <AiOutlineUpload size={100} color="#007bff" />
-                        <div className="upload-text">Upload BluePrint of the Project.</div>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            id="imageInput"
-                            onChange={handleImageChange}
-                            hidden
-                            aria-label="Upload Image"
-                        /> 
-                    </div>
-
-                    {image && (
-                        <div className="image-preview-container">
-                            <img src={image} alt="Uploaded Preview" className="role-image-preview" />
-                        </div>
-                    )}
-                </div>
-
                 <div className="stages-section">
                     <h3>Construction Stages</h3>
                     <div className="stage-dropdown">

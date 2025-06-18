@@ -147,7 +147,7 @@ function Stages() {
 
     } catch (error) {
       console.error('Error during prediction:', error);
-      toast.error('Prediction failed. Please try again.', { position: 'top-center', autoClose: 2000 });
+      toast.error( 'Prediction failed. Please try again.' , { position: 'top-center', autoClose: 2000 });
     } finally {
       setIsLoading(false);
     }

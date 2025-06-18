@@ -34,7 +34,19 @@ class AdminService {
     const deletedUser = await adminModel.findByIdAndDelete(userId);
     return deletedUser;
     }
-   
+   async addrole(title ,stageContent,assignedUser){
+    const existingRole = await userRole.findOne({ title, assignedUser });
+    if (existingRole) {
+        throw new Error('Role with this title and assigned user already exists.');
+    }
+       const newRole = new userRole({
+           title,
+           stageContent,
+           assignedUser
+       });
+       const savedRole = await newRole.save();
+       return savedRole;
+   }
 }
 
 module.exports = new AdminService();

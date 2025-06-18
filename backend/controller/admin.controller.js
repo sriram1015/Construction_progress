@@ -53,3 +53,15 @@ exports.deleteUser = async(req,res)=>{
         res.status(500).json({status:'error',message: 'Internal Server Error'});
     }
 }
+
+exports.AddRole = async(req,res)=>{
+    const {title, stageContent,assignedUser} = req.body;
+    try{
+        const newRole = await AdminService.addrole(title, stageContent, assignedUser);
+        res.status(201).json({status:'ok',message:'Role Added Successfully',role:newRole});
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).json({status:'error',message: err.message});
+    }
+}
