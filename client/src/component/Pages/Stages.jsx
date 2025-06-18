@@ -223,10 +223,12 @@ function Stages() {
           {preview && (
             <div className="preview-section">
               <h3>Image Preview:</h3>
+
               <img
                 src={preview}
                 alt="Selected file preview"
                 className="preview-image"
+
                 onClick={() => openImageModal(preview)}
               />
             </div>
@@ -264,6 +266,7 @@ function Stages() {
               <li key={task.id} className="task-item">
                 <span
                   onClick={() => openImageModal(task.image)}
+
                   className="task-image-icon"
                   title="View image"
                 >
