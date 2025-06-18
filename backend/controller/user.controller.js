@@ -1,24 +1,19 @@
 const UserService = require('../services/user.service');
 
-exports.registerUser = async (req,res)=>{
-    const {username,email,password,memberType}=req.body;
-    try{
-        const user = await UserService.register(username,email,password,memberType);
-        res.status(200).json(user, {message:'User Registered Successfully'});
-    } catch(err){
-        console.error(err);
-        res.status(400).json({message: 'Bad Request'});
-    }
-}
+
 exports.loginUser = async(req,res)=>{
-    const {email,password,memberType}=req.body;
-    if(!email || !password || !memberType){
+    const {username,password,memberType}=req.body;
+    if(!username || !password || !memberType){
         return res.status(400).json({message:'Please fill all the fields'});
     }
     try {
-        await UserService.login(email,password,memberType);
+        const user = await UserService.login(username,password,memberType);
         console.log('User Logged In Successfully');
-        res.status(200).json({message:'User Logged In Successfully'});
+        res.status(200).json({
+            status: "ok",
+            username: user.username,
+            memberType: user.memberType,
+            message:'User Logged In Successfully'});
     } catch (error) {
         console.error(error);
         res.status(500).json({message: 'Internal Server Error'});
@@ -43,7 +38,7 @@ exports.getuserProfile = async(req,res)=>{
 };
 
 exports.getUserjobs = async(req,res)=>{
-    const {username} = req.body;
+    const { username } = req.query;
     if(!username){
         return res.status(400).json({message:'Please fill all the fields'});
     }

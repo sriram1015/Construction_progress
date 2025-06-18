@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 
 const node_url = import.meta.env.VITE_NODE_URL;
 
-
 import './admindashboard.css';
+
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
-  const [editUser, setEditUser] = useState(null); // For editing user details
+  const [editUser, setEditUser] = useState(null);
   const [newUser, setNewUser] = useState({ username: '', email: '', password: '', memberType: '' });
   const navigate = useNavigate();
 
@@ -18,8 +18,8 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${node_url}/auth/all-users`);
-        if (response.data.status === 'ok') {
+        const response = await axios.get(`${node_url}/admin/allusers`);
+        if (response.data.status === 'ok' && Array.isArray(response.data.users)) {
           setUsers(response.data.users);
         } else {
           setError('Failed to fetch users');
@@ -36,10 +36,10 @@ const AdminDashboard = () => {
   // Delete user by ID
   const deleteUser = async (userId) => {
     try {
-      const response = await axios.delete(`${node_url}/auth/delete-user/${userId}`);
+      const response = await axios.delete(`${node_url}/admin/delete/${userId}`);
       if (response.data.status === 'ok') {
         setMessage('User deleted successfully.');
-        setUsers(users.filter(user => user._id !== userId)); // Remove the deleted user from state
+        setUsers(users.filter(user => user._id !== userId));
       } else {
         setError('Failed to delete user');
       }
@@ -52,14 +52,14 @@ const AdminDashboard = () => {
   // Update user details
   const updateUser = async (userId) => {
     try {
-      console.log('Updating user:', editUser); // Log user data being sent
-      const response = await axios.put(`${node_url}/auth/update-user/${userId}`, editUser);
+      setError('');
+      setMessage('');
+      const response = await axios.put(`${node_url}/admin/update/${userId}`, editUser);
 
-      console.log('Update response:', response.data); // Log backend response
-      if (response.data.status === 'ok') {
+      if (response.data.status === 'ok' && response.data.user) {
         setMessage('User updated successfully.');
-        setUsers(users.map(user => (user._id === userId ? response.data.updatedUser : user))); // Update the user in state
-        setEditUser(null); // Clear the edit form
+        setUsers(users.map(user => (user._id === userId ? response.data.user : user)));
+        setEditUser(null);
       } else {
         setError('Failed to update user');
       }
@@ -72,11 +72,13 @@ const AdminDashboard = () => {
   // Add new user
   const addUser = async () => {
     try {
+      setError('');
+      setMessage('');
       const response = await axios.post(`${node_url}/auth/register`, newUser);
-      if (response.data.status === 'ok') {
+      if (response.data.status === 'ok' && response.data.user) {
         setMessage('User added successfully.');
-        setUsers([...users, response.data.newUser]); // Add new user to the users array
-        setNewUser({ username: '', email: '', password: '', memberType: '' }); // Clear form
+        setUsers([...users, response.data.user]);
+        setNewUser({ username: '', email: '', password: '', memberType: '' });
       } else {
         setError('Failed to add user');
       }
@@ -86,9 +88,10 @@ const AdminDashboard = () => {
     }
   };
 
-  const addrole = async () => {
+  const addrole = () => {
     navigate('/addrole');
-  }
+  };
+
   return (
     <div className="admin-dashboard">
       <h2>Admin Dashboard</h2>
@@ -98,7 +101,7 @@ const AdminDashboard = () => {
       {message && <p className="success-msg">{message}</p>}
 
       {/* Users Table */}
-      {!error && users.length > 0 ? (
+      {!error && Array.isArray(users) && users.length > 0 ? (
         <table>
           <thead>
             <tr>
@@ -133,12 +136,20 @@ const AdminDashboard = () => {
                 </td>
                 <td>
                   {editUser && editUser._id === user._id ? (
-                    <input
-                      type="text"
+                    <select
                       value={editUser.memberType}
-                      onChange={(e) => setEditUser({ ...editUser, memberType: e.target.value })}
-                    />
-                  ) : user.memberType}
+                      onChange={e => setEditUser({ ...editUser, memberType: e.target.value })}
+                    >
+                      <option value="" disabled>Select Role</option>
+                      <option value="JuniorEngineer">Junior Engineer</option>
+                      <option value="AssistantEngineer">Assistant Engineer</option>
+                      <option value="ExecutiveEngineer">Executive Engineer</option>
+                      <option value="ChiefEngineer">Chief Engineer</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                    ) : (
+                    user.memberType
+                  )}
                 </td>
                 <td>
                   {editUser && editUser._id === user._id ? (
@@ -191,6 +202,7 @@ const AdminDashboard = () => {
           <option value="AssistantEngineer">Assistant Engineer</option>
           <option value="ExecutiveEngineer">Executive Engineer</option>
           <option value="ChiefEngineer">Chief Engineer</option>
+          <option value="admin">Admin</option>
         </select>
         <button onClick={addUser}>Add User</button>
       </div>
