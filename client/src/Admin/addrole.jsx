@@ -40,31 +40,31 @@ const AddRole = () => {
     };
 
     const handleSubmit = async (e) => {
-    e.preventDefault();
+        e.preventDefault();
 
-    if (!title || !assignedUser || Object.keys(stageContent).length === 0) {
-        setError('All fields are required.');
-        setTimeout(() => setError(''), 5000);
-        return;
-    }
+        if (!title || !assignedUser || Object.keys(stageContent).length === 0) {
+            setError('All fields are required.');
+            setTimeout(() => setError(''), 5000);
+            return;
+        }
 
-    try {
-        const { data } = await axios.post(
-            `${node_url}/admin/addrole`,
-            {
-                title,
-                stageContent,
-                assignedUser
-            }
-        );
-        setSuccess('Role added successfully!');
-        clearInputs();
-        setTimeout(() => setSuccess(''), 7000);
-    } catch (err) {
-        setError(err.response?.data?.error || 'An error occurred.');
-        setTimeout(() => setError(''), 7000);
-    }
-};
+        try {
+            const { data } = await axios.post(
+                `${node_url}/admin/addrole`,
+                {
+                    title,
+                    stageContent,
+                    assignedUser
+                }
+            );
+            setSuccess('Role added successfully!');
+            clearInputs();
+            setTimeout(() => setSuccess(''), 7000);
+        } catch (err) {
+            setError(err.response?.data?.error || 'An error occurred.');
+            setTimeout(() => setError(''), 7000);
+        }
+    };
 
     const addStage = () => {
         if (!selectedStageName) {
@@ -109,6 +109,9 @@ const AddRole = () => {
             <button className="back-btn" onClick={() => window.history.back()}>
                 <FiArrowLeft /> Back
             </button>
+            <h2 style={{ textAlign: 'center', paddingBottom: '2rem' }}>
+                <b>Assign Project to Engineer</b>
+            </h2>
 
             <form onSubmit={handleSubmit} className="add-role-form">
                 {error && <div className="error-msg">{error}</div>}

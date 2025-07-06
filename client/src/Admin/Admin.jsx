@@ -26,7 +26,7 @@ const AdminLogin = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${node_url}/auth/adminlogin`, formData);
+      const response = await axios.post(`${node_url}/admin/register`, formData);
       setMessage(response.data.message);
 
       if (response.data.status === 'ok') {

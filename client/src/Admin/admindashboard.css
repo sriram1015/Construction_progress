@@ -2,13 +2,14 @@
 
 /* General Styles */
 .admin-dashboard {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 30px;
+    max-width: 1300px;
+    padding: 5rem 5rem 15rem 5rem;
     background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     font-family: 'Poppins', sans-serif;
+    color: #333;
+    margin: 10px auto;
 }
 
 h2 {
@@ -43,17 +44,22 @@ h2 {
 
 /* Users Table */
 table {
-    width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
     background-color: #fff;
-    border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 3rem;
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 20px;
+    justify-content: center;
 }
 
 table td input {
-    font-size: 18px;
+    font-size: 16px;
     padding: 8px;
     width: 100%;
     box-sizing: border-box;
@@ -68,19 +74,19 @@ table td input:focus {
     outline: none;
 }
 
-table th,
 table td {
-    min-width: 150px;
-    width: 150px;
-    font-size: 18px;
-    white-space: nowrap;
+    width: 220px;
+    font-size: 17px;
     padding: 10px;
 }
 
 table th {
+    width: 250px;
+    text-align: center;
     background-color: #007bff;
     color: white;
     font-weight: 600;
+    padding: 12px;
 }
 
 table tr:hover {
@@ -91,7 +97,7 @@ table tr:hover {
 button {
     padding: 8px 16px;
     border: none;
-    border-radius: 5px;
+    border-radius: 15px;
     cursor: pointer;
     font-size: 18px;
     font-weight: 500;
@@ -105,61 +111,75 @@ button:hover {
 button.edit-btn {
     background-color: #12f125;
     color: #333;
-    margin-right: 8px;
+    margin: 0px 15px;
+    border-radius: 10px;
 }
 
 button.edit-btn:hover {
     background-color: #51cf38;
+    border-radius: 15px;
+    margin: 0px 15px;
+
+
 }
 
 button.delete-btn {
     background-color: #f7152c;
     color: white;
+    border-radius: 10px;
+
 }
 
 button.delete-btn:hover {
     background-color: #c82333;
+
 }
 
 button.save-btn {
     background-color: #28a745;
     color: white;
-    margin-right: 8px;
+    margin: 0px 15px;
+    border-radius: 10px;
+
 }
 
 button.save-btn:hover {
     background-color: #218838;
+    margin: 0px 15px;
+
+    border-radius: 10px;
+
 }
 
 button.cancel-btn {
     background-color: #6c757d;
     color: white;
+    border-radius: 10px;
+
 }
 
 button.cancel-btn:hover {
     background-color: #5a6268;
+    border-radius: 10px;
+
 }
 
 /* Add New User Form */
 .add-user-form {
-    margin-top: 30px;
-    padding: 20px;
+    padding: 5rem 0rem 2rem 0rem;
+    margin-top: 2rem;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.add-user-form h3 {
-    margin-bottom: 20px;
-    color: #333;
-    font-size: 24px;
-    font-weight: 600;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .add-user-form input,
 .add-user-form select {
-    width: 100%;
+    width: 70%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ddd;
@@ -177,7 +197,7 @@ button.cancel-btn:hover {
 }
 
 .add-user-form button {
-    width: 100%;
+    width: 30%;
     padding: 12px;
     background-color: #007bff;
     color: white;
@@ -195,17 +215,18 @@ button.cancel-btn:hover {
 
 /* Add Role Button */
 .add-role-btn {
-    margin-top: 20px;
     padding: 12px 24px;
-    background-color: #28a745;
-    color: white;
+    background: #28a745;
+    color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 18px;
-    font-weight: 500;
+    font: 500 18px sans-serif;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 20px;
+
 }
+
 
 .add-role-btn:hover {
     background-color: #218838;
@@ -213,22 +234,23 @@ button.cancel-btn:hover {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1080px) {
     .admin-dashboard {
-        padding: 20px;
+        padding: 1.5rem 1.5rem 5rem 1.5rem;
+        margin: 1rem;
     }
 
-    table th,
-    table td {
-        padding: 12px;
-    }
-
-    .add-user-form input,
-    .add-user-form select {
-        font-size: 18px;
+    table {
+        display: block;
+        overflow-x: auto;
     }
 
     button {
-        font-size: 14px;
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .add-user-form {
+        padding: 1.25rem;
     }
 }
