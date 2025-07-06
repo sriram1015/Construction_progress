@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 
 import { toast, ToastContainer } from "react-toastify";
-import { UserContext } from "./Auth/UseContext";
+import { UserContext } from "../Auth/UseContext";
 import "react-toastify/dist/ReactToastify.css";
 import "./NavBar.css";
 
