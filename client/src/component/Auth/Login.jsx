@@ -20,17 +20,14 @@ export default function Login() {
         e.preventDefault();
 
         if (!username || !password || !memberType) {
-            toast.error("Please fill in all fields", {
-                position: "top-right",
-                autoClose: 2000,
-            });
+            toast.error("Please fill in all fields", { position: "top-right", autoClose: 2000 });
             return;
         }
 
-        setLoading(true); // Start loading
+        setLoading(true);
 
         try {
-            const response = await axios.post(`${node_url}/auth/login`, {
+            const response = await axios.post(`${node_url}/user/login`, {
                 username,
                 password,
                 memberType,
@@ -39,13 +36,10 @@ export default function Login() {
             const data = response.data;
 
             if (data.status === "ok") {
-                const userData = { username, memberType };
-                setUser(userData);
-                toast.success("Login Successful!", { position: "bottom-right" });
+                setUser({ username, memberType });
+                toast.success("Login Successful!", { position: "top-right" });
 
-                // Navigate based on memberType (case-insensitive)
-                const type = memberType.toLowerCase();
-                navigate(type === "assistantengineer" ? "/vill" : "/stage");
+                navigate(memberType.toLowerCase() === "assistantengineer" ? "/vill" : "/profile");
             } else {
                 toast.error(data.message || "Login failed. Please try again.", {
                     position: "top-right",
@@ -54,30 +48,19 @@ export default function Login() {
             }
         } catch (error) {
             console.error("Login error:", error);
-
-            if (error.response) {
-                toast.error(
-                    error.response.data.message || "Server error. Please try again later.",
-                    { position: "top-right", autoClose: 2000 }
-                );
-            } else if (error.request) {
-                toast.error("Network error. Please check your connection.", {
-                    position: "top-right",
-                    autoClose: 2000,
-                });
-            } else {
-                toast.error("An unexpected error occurred. Please try again.", {
-                    position: "top-right",
-                    autoClose: 2000,
-                });
-            }
+            toast.error(data.message || "Login failed. Please try again.", {
+                position: "top-right",
+                autoClose: 2000,
+            });
         } finally {
-            setLoading(false); // End loading
+            setLoading(false);
         }
     };
 
     return (
         <div className="login-container">
+            {/* NavBar.jsx */}
+            
             <div className="login-form">
                 <form onSubmit={handleSubmit}>
                     <h1 className="login-title">Login</h1>
@@ -111,9 +94,7 @@ export default function Login() {
                             onChange={(e) => setMemberType(e.target.value)}
                             className="form-select"
                         >
-                            <option value="" disabled>
-                                Select Role
-                            </option>
+                            <option value="" disabled>Select Role</option>
                             <option value="JuniorEngineer">Junior Engineer</option>
                             <option value="AssistantEngineer">Assistant Engineer</option>
                         </select>

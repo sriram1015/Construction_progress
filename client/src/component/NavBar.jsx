@@ -14,7 +14,7 @@ const NavBar = () => {
     const { user, setUser } = useContext(UserContext); // Access user and setUser from context
 
     const handleLogout = () => {
-        toast.success("Successfully logged out!", { position: "top-center" });
+        toast.success("Successfully logged out!", { position: "top-right" });
         setTimeout(() => {
             setUser(null); // Clear user context
         }, 1000);
@@ -22,7 +22,7 @@ const NavBar = () => {
 
     const navItems = [
         { id: 1, name: "Home", path: "/", icon: <HiHome /> },
-        user && { id: 2, name: "Dashboard", path: "/stage", icon: <RxDashboard /> },
+        user && { id: 2, name: "Dashboard", path: "/stages", icon: <RxDashboard /> },
         user && { id: 3 , name: "Profile", path: "/profile", icon: <CgProfile /> },
         { id: 3, name: "About", path: "/about", icon: <IoInformationCircleOutline /> },
         {
@@ -38,8 +38,8 @@ const NavBar = () => {
         <div className="nav-Bar">
             <div className="logo">
                 <Link to="/" className="nav-link">
-                    <img src="/dcirs.png" alt="onesrv" className="logo-image" />
-                    OneSRV
+                    <img src="/logo3.png" alt="onesrv" className="logo-image" />
+                    oneSRV
                 </Link>
             </div>
             <div className="nav-list">
@@ -59,7 +59,6 @@ const NavBar = () => {
                     </div>
                 ))}
             </div>
-            <ToastContainer />
         </div>
     );
 };
