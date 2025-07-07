@@ -74,7 +74,7 @@ const AdminDashboard = () => {
     try {
       setError('');
       setMessage('');
-      const response = await axios.post(`${node_url}/auth/register`, newUser);
+      const response = await axios.post(`${node_url}/admin/register`, newUser);
       if (response.data.status === 'ok' && response.data.user) {
         setMessage('User added successfully.');
         setUsers([...users, response.data.user]);
@@ -94,18 +94,19 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      <h2>Admin Dashboard</h2>
+      <h1 style={{ textAlign: 'center' }}><b>Admin Dashboard</b></h1>
 
       {/* Display error or success message */}
-      {error && <p className="error-msg">{error}</p>}
-      {message && <p className="success-msg">{message}</p>}
+      {error && <div className="error-msg">{error}</div>}
+      {message && <div className="success-msg">{message}</div>}
+      <button className="add-role-btn" onClick={addrole}>Assign Project to Engineer</button>
 
       {/* Users Table */}
       {!error && Array.isArray(users) && users.length > 0 ? (
         <table>
+          <h2 ><b>Users List</b></h2>
           <thead>
             <tr>
-              <th>No</th>
               <th>Name</th>
               <th>Email</th>
               <th>Role</th>
@@ -115,7 +116,6 @@ const AdminDashboard = () => {
           <tbody>
             {users.map((user, index) => (
               <tr key={user._id}>
-                <td>{index + 1}</td>
                 <td>
                   {editUser && editUser._id === user._id ? (
                     <input
@@ -123,7 +123,9 @@ const AdminDashboard = () => {
                       value={editUser.username}
                       onChange={(e) => setEditUser({ ...editUser, username: e.target.value })}
                     />
-                  ) : user.username}
+                  ) : (
+                    user.username
+                  )}
                 </td>
                 <td>
                   {editUser && editUser._id === user._id ? (
@@ -132,7 +134,9 @@ const AdminDashboard = () => {
                       value={editUser.email}
                       onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
                     />
-                  ) : user.email}
+                  ) : (
+                    user.email
+                  )}
                 </td>
                 <td>
                   {editUser && editUser._id === user._id ? (
@@ -147,7 +151,7 @@ const AdminDashboard = () => {
                       <option value="ChiefEngineer">Chief Engineer</option>
                       <option value="admin">Admin</option>
                     </select>
-                    ) : (
+                  ) : (
                     user.memberType
                   )}
                 </td>
@@ -174,7 +178,7 @@ const AdminDashboard = () => {
 
       {/* Add New User Form */}
       <div className="add-user-form">
-        <h3>Add New User</h3>
+        <h2><b>Add New User</b></h2>
         <input
           type="text"
           placeholder="Username"
@@ -204,12 +208,12 @@ const AdminDashboard = () => {
           <option value="ChiefEngineer">Chief Engineer</option>
           <option value="admin">Admin</option>
         </select>
-        <button onClick={addUser}>Add User</button>
+        <button className="primary-btn" onClick={addUser}>Add User</button>
       </div>
 
-      <button className="add-role-btn" onClick={addrole}>Assign Project</button>
     </div>
   );
 };
 
 export default AdminDashboard;
+

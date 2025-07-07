@@ -2,18 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import Login from "./component/Auth/Login";
-import Profile from "./component/Auth/Profile";
-import Stage from "./component/Pages/Stages";
+import Login from "./Auth/Login";
+import Profile from "./Auth/Profile";
+import Stage from "./Pages/Stages";
 import App from "./App";
 import NavBar from "./component/NavBar";
 import ProtectedRoute from "./component/ProtectedRoute";
-import Admin from "./component/Admin/Admindashboard";
-import AddRole from "./component/Admin/addrole"
-import { UserProvider } from "./component/Auth/UseContext";
+import Admin from "./Admin/Admindashboard";
+import AddRole from "./Admin/addrole"
+import { UserProvider } from "./Auth/UseContext";
 import '@coreui/coreui/dist/css/coreui.min.css';
 import DepartmentDetail from "./DepartmentDetail";
-import Getjob from "./component/Pages/listdata";
+import Getjob from "./Pages/listdata";
 const Main = () => {
     return (
         <UserProvider>
