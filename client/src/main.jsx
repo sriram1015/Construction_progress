@@ -3,8 +3,8 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Login from "./Auth/Login";
-import Profile from "./Auth/Profile";
-import Stage from "./Pages/Stages";
+import Profile from "./Pages/Profile";
+import PredictionDetails from "./Pages/PredictionDetails";
 import App from "./App";
 import NavBar from "./component/NavBar";
 import ProtectedRoute from "./component/ProtectedRoute";
@@ -39,7 +39,7 @@ const Main = () => {
                         path="/stages"
                         element={
                             <ProtectedRoute>
-                                <Stage />
+                                <PredictionDetails />
                             </ProtectedRoute>
                         }
                     />

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { UserContext } from '../Auth/UseContext';
 import { useNavigate } from 'react-router-dom';
+import './listdata.css';
 
 const node_url = import.meta.env.VITE_NODE_URL;
 
@@ -20,7 +21,6 @@ const GetUserJobs = () => {
       setJobs([]);
       try {
         const response = await axios.get(`${node_url}/user/job?username=${user.username}`);
-        // Ensure every job has username included
         const jobsWithUsername = response.data.map((job) => ({
           ...job,
           username: user.username
@@ -36,7 +36,7 @@ const GetUserJobs = () => {
   }, [user]);
 
   if (!user || !user.username) {
-    return <div className="text-center mt-10">Please login to view your jobs.</div>;
+    return <div className="login-prompt">Please login to view your jobs.</div>;
   }
 
   const handleGoToStages = (job) => {
@@ -49,47 +49,49 @@ const GetUserJobs = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
-      <h2 className="text-xl font-bold mb-4 text-center">Assigned Jobs</h2>
-      {loading && <div>Loading...</div>}
-      {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
+    <div className="jobs-container">
+      <h2 className="jobs-title">Assigned Jobs</h2>
+      {loading && <div className="loading-text">Loading...</div>}
+      {error && <div className="error-text">{error}</div>}
       {jobs.length > 0 ? (
-        <div className="bg-gray-100 p-4 rounded">
-          <ul className="list-disc pl-5">
-            {jobs.map((job, index) => (
-              <li key={index} className="mb-4">
-                <strong>Title:</strong> {job.title} <br />
-                {job.image && (
-                  <>
-                    <strong>Image:</strong>{' '}
-                    <img src={job.image} alt="Job" style={{ maxWidth: 100 }} />
-                    <br />
-                  </>
-                )}
-                <strong>Stages:</strong>
-                <ul className="ml-4">
-                  {job.stageContent &&
-                    Object.entries(job.stageContent).map(([stage, value]) => (
-                      <li key={stage}>
-                        <strong>{stage}:</strong> {value}
-                      </li>
-                    ))}
-                </ul>
+        <div className="jobs-grid">
+          {jobs.map((job, index) => (
+            <div key={index} className="job-card">
+              <div className="job-stages">
+                <h3 className="job-title">{job.title}</h3>
+                <div className="stages-container">
+                  {job.stageContent && Object.entries(job.stageContent).map(([stage, value]) => (
+                    <div key={stage} className="stage-item">
+                      <span className="stages-name">{stage}:</span>
+                      <span className="stages-value">{value}</span>
+                    </div>
+                  ))}
+                </div>
                 <button
-                  className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  className="view-stages-btn"
                   onClick={() => handleGoToStages(job)}
                 >
                   Go to Stages
                 </button>
-              </li>
-            ))}
-          </ul>
+              </div>
+              {job.image && (
+                <div className="job-image-container">
+                  <img 
+                    src={job.image} 
+                    alt={`${job.title} visual`} 
+                    className="job-image" 
+                  />
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       ) : !loading && !error ? (
-        <div>No jobs found.</div>
+        <div className="no-jobs-text">No jobs found.</div>
       ) : null}
     </div>
   );
 };
 
 export default GetUserJobs;
+
