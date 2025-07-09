@@ -1,6 +1,6 @@
 .stages-list {
   background: var(--darker);
-  padding: 1rem 1rem 5rem 1rem;
+  padding: 1rem 1rem 3rem 1rem;
   border-radius: 12px;
   height: fit-content;
 }
@@ -62,3 +62,11 @@
   align-items: center;
   gap: 0.3rem;
 }
+
+
+@media (max-width: 1000px) {
+.stages-list {
+  padding: 1rem;
+}
+}
+  

@@ -189,12 +189,11 @@ function PredictionDetails() {
     );
   }
 
-
   return (
     <div className="main-page">
       <header className="main-header">
         <div className="header-left">
-          <h1 >{job?.title || 'Construction Tracker'}</h1>
+          <h1>{job?.title || 'Construction Tracker'}</h1>
           <h5> user: {job?.username || 'Guest'}</h5>
         </div>
         <div className="header-right">
@@ -221,8 +220,17 @@ function PredictionDetails() {
 
         <TaskHistory tasks={tasks} openImageModal={openImageModal} />
       </div>
+
+      {modalImage && (
+        <div className="image-modal" onClick={closeImageModal}>
+          <span className="close-modal">&times;</span>
+          <img src={modalImage} alt="Full size" className="modal-content" />
+        </div>
+      )}
+      <ToastContainer autoClose={2000} />
     </div>
   );
-};
+}
 
 export default PredictionDetails;
+

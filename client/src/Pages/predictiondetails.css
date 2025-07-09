@@ -1,8 +1,7 @@
 /* PredictionDetails.css */
-
 .main-page {
-  display: grid;
-  grid-template-rows: auto 1fr;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   background-color: #f1f5f9;
 }
@@ -11,24 +10,25 @@
 .main-header {
   background: linear-gradient(135deg, #0f172a, #1e293b);
   color: #f8fafc;
-  padding: 2rem;
+  padding: 1.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start; /* Changed from center to flex-start for better alignment */
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 1rem;
   position: relative;
+  top: 0;
   z-index: 10;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
-
 
 .header-left {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  min-width: 200px;
+  min-width: 250px;
+  flex: 1; 
 }
 
 .header-right {
@@ -36,36 +36,37 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 0.5rem;
+  flex: 1; 
 }
 
 .main-header h1 {
-  font-size: 2.5rem;
-  font-weight: 00;
+  font-size: 2rem;
+  font-weight: 600;
   margin: 0;
   background: linear-gradient(90deg, #38bdf8, #0ea5e9);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  letter-spacing: -0.025em;
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: 'times new roman', serif;
+  font-family: 'Times New Roman', serif;
   max-width: 300px;
 }
 
-.main-header p {
-  font-size: 1rem;
+.main-header h5 {
+  font-size: 1.1rem;
+
   color: #94a3b8;
-  margin: 0;
+  margin: 5px;
   font-weight: 400;
 }
 
 .progress-summary {
+  flex-direction: column;
   display: flex;
-  gap: 1.5rem;
-  align-items: center;
+  align-items: flex-end;  
 }
 
 .progress-summary p {
@@ -120,99 +121,64 @@
 /* --- Main Layout --- */
 .main-layout {
   display: grid;
-  grid-template-columns: 280px 1fr 350px;
+  grid-template-columns: 0.75fr 1fr 0.9fr; /* Reduced stages width, increased prediction form width */
   gap: 1.5rem;
   padding: 1.5rem;
-  height: calc(100vh - 72px);
-  overflow: hidden;
+  flex: 1;
 }
 
 /* --- Responsive Design --- */
 @media (max-width: 1200px) {
   .main-layout {
-    grid-template-columns: 240px 1fr 300px;
-    padding: 1.25rem;
+    grid-template-columns: 0.75fr 1fr 0.9fr; /* Further adjustment for medium screens */
   }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1000px) {
+  .main-layout {
+    grid-template-columns: 0.75fr 1fr; /* Reduced stages width */
+    grid-template-rows: auto auto;
+  }
+  
+  .task-history {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {  
+  .main-layout {
+    grid-template-columns: 0.50 1.5fr; /* Even more reduced stages width */
+  }
+}
+
+@media (max-width: 598px) {
   .main-layout {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
-    height: auto;
-    min-height: calc(100vh - 72px);
-  }
-  
-  .stages-list {
-    order: 1;
-  }
-  
-  .prediction-form {
-    order: 2;
   }
   
   .task-history {
-    order: 3;
-  }
-}
-
-@media (max-width: 768px) {
-  .main-header {
-    padding: 1rem;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  
-  .main-header h1 {
-    font-size:2rem;
-    max-width: 200px;
-  }
-  
-  .prediction-form,
-  .stages-list,
-  .task-history {
-    padding: 1.25rem;
-  }
-}
-
-@media (max-width: 640px) {
-  .main-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-  }
-  
-  .header-right {
-    width: 100%;
-    align-items: flex-start;
-  }
-  
-  .progress-summary {
-    width: 100%;
-    justify-content: space-between;
-    gap: 0.5rem;
-  }
-  
-  .main-header h1 {
-    max-width: 100%;
+    grid-column: span 1;
   }
 }
 
 @media (max-width: 480px) {
-  .progress-summary {
+.main-header {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+    align-items: stretch;
+    gap: 1rem;
   }
   
-  .progress-summary p {
-    font-size: 0.8rem;
+  .header-right {
+    align-items: stretch;
   }
   
-  .progress-summary span {
-    padding: 0.2rem 0.6rem;
+  .progress-summary {
+    align-items: flex-start !important;
+  }
+  
+  .username {
+    justify-content: flex-start;
   }
   
   .main-layout {

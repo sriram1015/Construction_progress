@@ -21,9 +21,8 @@ const NavBar = () => {
     };
 
     const navItems = [
-        { id: 1, name: "Home", path: "/", icon: <HiHome /> },
-        user && { id: 2, name: "Dashboard", path: "/stages", icon: <RxDashboard /> },
-        user && { id: 3 , name: "Profile", path: "/profile", icon: <CgProfile /> },
+        user && { id: 1, name: "Dashboard", path: "/stages", icon: <RxDashboard /> },
+        user && { id: 2, name: "Profile", path: "/profile", icon: <CgProfile /> },
         { id: 3, name: "About", path: "/about", icon: <IoInformationCircleOutline /> },
         {
             id: 4,
@@ -36,22 +35,22 @@ const NavBar = () => {
 
     return (
         <div className="nav-Bar">
-            <div className="logo">
-                <Link to="/" className="nav-link">
-                    <img src="/logo3.png" alt="onesrv" className="logo-image" />
-                    oneSRV
-                </Link>
-            </div>
             <div className="nav-list">
+                <div className="logo">
+                    <Link to="/" className="nav-links">
+                        <img src="/logo3.png" alt="onesrv" className="logo-image" />
+                        <b>OneSRV</b>
+                    </Link>
+                </div>
                 {navItems.map((item) => (
                     <div key={item.id} className="nav-item">
                         {item.action ? (
-                            <button onClick={item.action} className="nav-link">
+                            <button onClick={item.action} className="nav-links">
                                 <span className="nav-icon">{item.icon}</span>
                                 {item.name}
                             </button>
                         ) : (
-                            <Link to={item.path} className="nav-link">
+                            <Link to={item.path} className="nav-links">
                                 <span className="nav-icon">{item.icon}</span>
                                 {item.name}
                             </Link>

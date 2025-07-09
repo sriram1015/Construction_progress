@@ -1,6 +1,6 @@
 .task-history {
   background: var(--lighter);
-  padding: 1rem 1rem 5rem 0rem;
+  padding: 1rem 1rem 6rem 0rem;
   border-radius: 12px;
   box-shadow: var(--shadow-sm);
   height: fit-content;
@@ -96,3 +96,12 @@
   opacity: 0.5;
 }
 
+
+@media (max-width: 1000px) {
+  .task-history {
+    margin: 2rem;
+    padding: 2rem 3rem 5rem 2rem;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
