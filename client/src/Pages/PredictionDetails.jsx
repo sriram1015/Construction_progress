@@ -8,9 +8,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import './predictiondetails.css';
 
-import StagesList from '../component/StagesList';
 import PredictionForm from '../component/PredictionForm';
 import TaskHistory from '../component/TaskHistory';
+import StagesList from '../component/StagesList';
 
 
 
