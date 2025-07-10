@@ -1,0 +1,72 @@
+.stages-list {
+  background: var(--darker);
+  padding: 1rem 1rem 3rem 1rem;
+  border-radius: 12px;
+  height: fit-content;
+}
+
+.stages-title {
+  color: var(--lighter);
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.stages-title::before {
+  content: '🏗️';
+  font-size: 1.1rem;
+}
+
+.stage-card {
+  padding: 1.2rem;
+  margin-bottom: 0.8rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  transition: var(--transition);
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stage-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(3px);
+}
+
+.stage-card.selected {
+  background: rgba(67, 97, 238, 0.2);
+  border-color: var(--accent);
+}
+
+.stage-name {
+  color: var(--lighter);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stage-name::before {
+  content: '▹';
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+.stage-tasks {
+  font-size: 0.85rem;
+  color: var(--gray-light);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+
+@media (max-width: 1000px) {
+.stages-list {
+  padding: 1rem;
+}
+}
+  

@@ -24,7 +24,7 @@
     bottom: -10px;
     left: 50%;
     transform: translate(-50%);
-    width: 400px;
+    width: 100px;
     height: 3px;
     background: linear-gradient(90deg, rgb(106, 17, 203), rgb(37, 117, 252));
     border-radius: 3px;

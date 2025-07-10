@@ -1,14 +1,23 @@
+// --- PredictionDetails.jsx ---
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
-import './Stage.css';
+
+
+import './PredictionDetails.css';
+
+import StagesList from '../component/StagesList';
+import PredictionForm from '../component/PredictionForm';
+import TaskHistory from '../component/TaskHistory';
+
+
 
 const node_url = import.meta.env.VITE_NODE_URL;
 const flask_url = import.meta.env.VITE_FLASK_URL;
 
-function Stages() {
+function PredictionDetails() {
   const location = useLocation();
   const job = location.state?.job || JSON.parse(sessionStorage.getItem('selectedJob') || 'null');
   const [stageContent, setStageContent] = useState([]);
@@ -147,7 +156,7 @@ function Stages() {
 
     } catch (error) {
       console.error('Error during prediction:', error);
-      toast.error( 'Prediction failed. Please try again.' , { position: 'top-center', autoClose: 2000 });
+      toast.error('Prediction failed. Please try again.', { position: 'top-center', autoClose: 2000 });
     } finally {
       setIsLoading(false);
     }
@@ -181,119 +190,47 @@ function Stages() {
   }
 
   return (
-    <div className="main-container">
-      <div className='header'>
-        <h3 className="project-title">{uppertitle || 'Construction Progress Tracker'}</h3>
-        <div className="header-content">
-          <div className="user-info">
-            <h4 className="username">Logged in as: {job?.username || 'Guest'}</h4>
-            <div className="progress-summary">
-              <p className='progress1'>Total Tasks Completed:</p>
-              <span className='progress2'> {totalTasksCompleted}</span>
-              <p className='progress3'>Overall Progress:</p>
-              <span className='progress4'> {totalProgressPercentage}%</span>
-            </div>
+    <div className="main-page">
+      <header className="main-header">
+        <div className="header-left">
+          <h1>{job?.title || 'Construction Tracker'}</h1>
+          <h5> user: {job?.username || 'Guest'}</h5>
+        </div>
+        <div className="header-right">
+          <h3 className="username">Logged in as: {job?.username || 'Guest'}</h3>
+          <div className="progress-summary">
+            <p className='progress1'>Total Tasks Completed: <span>{totalTasksCompleted}</span></p>
+            <p className='progress3'>Overall Progress: <span>{totalProgressPercentage}%</span></p>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="side-nav">
-        {stageContent.map((stage, idx) => (
-          <button
-            key={idx}
-            className={`nav-button ${selectedStage === stage.stage ? 'active' : ''}`}
-            onClick={() => setSelectedStage(stage.stage)}
-          >
-            <span className="stage-name">{stage.stage}</span>
-            <span className="stage-progress">Progress: {progressionRate[stage.stage] || 0} tasks</span>
-          </button>
-        ))}
-      </div>
+      <div className="main-layout">
+        <StagesList stageContent={stageContent} selectedStage={selectedStage} setSelectedStage={setSelectedStage} progressionRate={progressionRate} />
 
-      <div className="predictcontent">
-        <h1>{selectedStage || 'Select a Stage'}</h1>
-        <div className="predict-form-container">
-          <div className="form-group">
-            <input type="file" id="fileInput" onChange={onFileChange} accept="image/*" />
-            <label htmlFor="fileInput" className="upload-button">
-              {file ? 'Change Image' : 'Upload Image'}
-            </label>
-          </div>
+        <PredictionForm
+          file={file}
+          preview={preview}
+          onFileChange={onFileChange}
+          onPredict={onPredict}
+          isLoading={isLoading}
+          prediction={prediction}
+          similarity={similarity}
+        />
 
-          {preview && (
-            <div className="preview-section">
-              <h3>Image Preview:</h3>
-
-              <img
-                src={preview}
-                alt="Selected file preview"
-                className="preview-image"
-
-                onClick={() => openImageModal(preview)}
-              />
-            </div>
-          )}
-
-          <button onClick={onPredict} className="predict-button" disabled={isLoading || !file}>
-            {isLoading ? (
-              <>
-                <span className="spinner"></span>
-                Predicting...
-              </>
-            ) : 'Predict'}
-          </button>
-
-          {prediction && similarity !== null && (
-            <div className="results-section">
-              <h3>Prediction Result:</h3>
-              <p>
-                <strong>Stage:</strong> {prediction} <br />
-                <strong>Progress:</strong> {similarity}%
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="todo-list">
-        <div className="todo-header">
-          <h2>Task History</h2>
-          <div className="task-count">{tasks.length} tasks recorded</div>
-        </div>
-        <ul className="task-list">
-          {tasks.length > 0 ? (
-            tasks.map((task) => (
-              <li key={task.id} className="task-item">
-                <span
-                  onClick={() => openImageModal(task.image)}
-
-                  className="task-image-icon"
-                  title="View image"
-                >
-                  🖼️
-                </span>
-                <span className="task-text">{task.text}</span>
-                <span className="task-timestamp">{task.timestamp}</span>
-              </li>
-            ))
-          ) : (
-            <li className="no-tasks">No tasks recorded yet</li>
-          )}
-        </ul>
+        <TaskHistory tasks={tasks} openImageModal={openImageModal} />
       </div>
 
       {modalImage && (
-        <div className="modal" onClick={closeImageModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close-button" onClick={closeImageModal}>&times;</span>
-            <img src={modalImage} alt="Full-size preview" className="modal-image" />
-          </div>
+        <div className="image-modal" onClick={closeImageModal}>
+          <span className="close-modal">&times;</span>
+          <img src={modalImage} alt="Full size" className="modal-content" />
         </div>
       )}
-
       <ToastContainer autoClose={2000} />
     </div>
   );
 }
 
-export default Stages;
+export default PredictionDetails;
+

@@ -1,0 +1,234 @@
+/* PredictionDetails.css */
+.main-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f1f5f9;
+}
+
+/* --- Header Styles --- */
+.main-header {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: #f8fafc;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Changed from center to flex-start for better alignment */
+  flex-wrap: wrap;
+  gap: 1rem;
+  position: relative;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1; 
+}
+
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  flex: 1; 
+}
+
+.main-header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+  background-clip: text;
+  color: transparent;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  font-family: 'Times New Roman', serif;
+}
+
+.main-header h5 {
+  font-size: 1.1rem;
+  width: 50% ;
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.progress-summary {
+  flex-direction: column;
+  display: flex;
+  align-items: flex-end;  
+}
+
+.progress-summary p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.progress-summary span {
+  font-weight: 600;
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+
+.username {
+  font-size: 1rem;
+  color: #e2e8f0;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.username::before {
+  content: "👤";
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+.progress1::before {
+  content: "✓";
+  color: #4ade80;
+  font-weight: bold;
+  margin-right: 0.25rem;
+}
+
+.progress3::before {
+  content: "➔";
+  color: #60a5fa;
+  font-weight: bold;
+  margin-right: 0.25rem;
+}
+
+/* --- Main Layout --- */
+.main-layout {
+  display: grid;
+  grid-template-columns: 0.75fr 1fr 0.9fr; /* Reduced stages width, increased prediction form width */
+  gap: 1.5rem;
+  padding: 1.5rem;
+  flex: 1;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 1200px) {
+  .main-layout {
+    grid-template-columns: 0.75fr 1fr 0.9fr; /* Further adjustment for medium screens */
+  }
+}
+
+@media (max-width: 1000px) {
+  .main-layout {
+    grid-template-columns: 0.75fr 1fr; /* Reduced stages width */
+    grid-template-rows: auto auto;
+  }
+  
+  .task-history {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {  
+  .main-layout {
+    grid-template-columns: 0.50 1.5fr; /* Even more reduced stages width */
+  }
+  .task-history {
+    margin: 15px !important;
+  }
+ 
+}
+
+@media (max-width: 578px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+  
+  .task-history {
+    grid-column: span 1;
+  }
+   .header-right {
+    padding-top: 15px;
+  }
+}
+
+@media (max-width: 500px) {
+.main-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .header-right {
+    align-items: stretch;
+    padding-top: 5px;
+
+  }
+  
+  .progress-summary {
+    align-items: flex-start !important;
+  }
+  
+  .username {
+    justify-content: flex-start;
+  }
+  
+  .main-layout {
+    padding: 1rem;
+    gap: 1rem;
+  }
+}
+
+/* --- Loading State --- */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 3px solid #38bdf8;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+/* --- Modal Styles --- */
+.image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.close-modal {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
