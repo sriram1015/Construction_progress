@@ -1,6 +1,6 @@
 // --- StagesList.jsx ---
 import React from 'react';
-import './Styles/StagesList.css';
+import './Styles/stageslist.css'; // Ensure you have the correct path to your CSS file
 
 const StagesList = ({ stageContent, selectedStage, setSelectedStage, progressionRate }) => {
   return (
