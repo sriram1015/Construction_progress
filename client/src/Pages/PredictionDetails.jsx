@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-import './PredictionDetails.css';
+import './predictiondetails.css';
 
 import StagesList from '../component/StagesList';
 import PredictionForm from '../component/PredictionForm';
