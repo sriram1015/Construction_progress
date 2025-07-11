@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './History.css';
 
 const node_url = import.meta.env.VITE_NODE_URL;

@@ -1,5 +1,5 @@
 // App.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Dashboard from './Dashboard';
 import PredictForm from './Foundation';
 

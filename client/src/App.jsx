@@ -1,8 +1,8 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import Carousel from './component/Carousel';
 import './App.css';
 import './index.css';
+
 const App = () => {
   const constructionTypes = [
     { id: 1, name: 'Adi Dravidar & Tribal Welfare', icon: '🌍' },
