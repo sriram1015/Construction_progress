@@ -14,6 +14,7 @@ import { UserProvider } from "./Auth/UseContext";
 import '@coreui/coreui/dist/css/coreui.min.css';
 import DepartmentDetail from "./DepartmentDetail";
 import Getjob from "./Pages/listdata";
+
 const Main = () => {
     return (
         <UserProvider>

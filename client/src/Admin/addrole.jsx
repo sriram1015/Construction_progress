@@ -1,8 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { useState, useRef, useEffect } from 'react';
+
 import axios from 'axios';
-import { AiOutlineUpload } from 'react-icons/ai';
 import { FiArrowLeft } from 'react-icons/fi';
 import './AddRole.css';
 
