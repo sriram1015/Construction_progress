@@ -1,5 +1,5 @@
 // --- PredictionDetails.jsx ---
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
