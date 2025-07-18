@@ -1,5 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FiArrowLeft } from 'react-icons/fi';
 import './AddRole.css';
@@ -7,7 +6,6 @@ import './AddRole.css';
 const node_url = import.meta.env.VITE_NODE_URL;
 
 const AddRole = () => {
-    const editorEl = useRef(null);
     const [title, setTitle] = useState('');
     const [stageContent, setStageContent] = useState({});
     const [assignedUser, setAssignedUser] = useState('');
@@ -15,7 +13,7 @@ const AddRole = () => {
     const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedStageName, setSelectedStageName] = useState(''); // State for selected stage name
+    const [selectedStageName, setSelectedStageName] = useState('');
 
     // Predefined list of stage names
     const stageNames = [
@@ -32,9 +30,7 @@ const AddRole = () => {
         setTitle('');
         setStageContent({});
         setAssignedUser('');
-        if (editorEl.current) {
-            editorEl.current.editor.setData('');
-        }
+        setSelectedStageName('');
     };
 
     const handleSubmit = async (e) => {
@@ -47,7 +43,7 @@ const AddRole = () => {
         }
 
         try {
-            const { data } = await axios.post(
+            await axios.post(
                 `${node_url}/admin/addrole`,
                 {
                     title,
@@ -64,18 +60,23 @@ const AddRole = () => {
         }
     };
 
+    // Only add the selected stage name if not already present
     const addStage = () => {
         if (!selectedStageName) {
             setError('Please select a stage name.');
             setTimeout(() => setError(''), 5000);
             return;
         }
-
+        if (stageContent.hasOwnProperty(selectedStageName)) {
+            setError('Stage already added.');
+            setTimeout(() => setError(''), 5000);
+            return;
+        }
         setStageContent((prev) => ({
             ...prev,
             [selectedStageName]: '',
         }));
-        setSelectedStageName(''); // Reset the dropdown after adding
+        setSelectedStageName('');
     };
 
     const handleStageChange = (stageName, content) => {
@@ -107,9 +108,6 @@ const AddRole = () => {
             <button className="back-btn" onClick={() => window.history.back()}>
                 <FiArrowLeft /> Back
             </button>
-            <h2 style={{ textAlign: 'center', paddingBottom: '2rem' }}>
-                <b>Assign Project to Engineer</b>
-            </h2>
 
             <form onSubmit={handleSubmit} className="add-role-form">
                 {error && <div className="error-msg">{error}</div>}
@@ -152,14 +150,6 @@ const AddRole = () => {
                     {Object.keys(stageContent).map((stage) => (
                         <div key={stage} className="stage-editor">
                             <h4>{stage}</h4>
-                            <CKEditor
-                                editor={ClassicEditor}
-                                data={stageContent[stage]}
-                                onChange={(event, editor) =>
-                                    handleStageChange(stage, editor.getData())
-                                }
-                                ref={editorEl}
-                            />
                         </div>
                     ))}
                 </div>
@@ -178,7 +168,7 @@ const AddRole = () => {
                                 Select a user
                             </option>
                             {allUsers.map((user) => (
-                                <option key={user.id} value={user.username}>
+                                <option key={user.id || user._id} value={user.username}>
                                     {user.username}
                                 </option>
                             ))}
