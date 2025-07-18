@@ -39,7 +39,7 @@ export default function Login() {
                 setUser({ username, memberType });
                 toast.success("Login Successful!", { position: "top-right" });
 
-                navigate(memberType.toLowerCase() === "assistantengineer" ? "/vill" : "/profile");
+                navigate(memberType === "admin" ? "/admin" : "/profile");
             } else {
                 toast.error(data.message || "Login failed. Please try again.", {
                     position: "top-right",
@@ -95,8 +95,11 @@ export default function Login() {
                             className="form-select"
                         >
                             <option value="" disabled>Select Role</option>
-                            <option value="JuniorEngineer">Junior Engineer</option>
-                            <option value="AssistantEngineer">Assistant Engineer</option>
+                      <option value="JuniorEngineer">Junior Engineer</option>
+                      <option value="AssistantEngineer">Assistant Engineer</option>
+                      <option value="ExecutiveEngineer">Executive Engineer</option>
+                      <option value="ChiefEngineer">Chief Engineer</option>
+                      <option value="admin">Admin</option>
                         </select>
                     </div>
 

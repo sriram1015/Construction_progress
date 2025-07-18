@@ -8,10 +8,12 @@ class UserService{
         const user = await userModel.findOne({username, memberType});
         if(!user){
             throw new Error('User Not Found');
+            console.error('User Not Found');
         }
         const isMatch = await bcrypt.compare(password , user.password);
         if(!isMatch){
             throw new Error('Invalid Credentials');
+            console.error('Invalid Credentials');
         }
         return user;
     }
