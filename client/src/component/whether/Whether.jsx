@@ -8,7 +8,7 @@ import location from "../assets/location.png";
 import loadingimg from "../assets/loading.gif";
 import "./whether.css";
 
-const API_KEY = import.meta.env.VITE_API_KEY; 
+const API_KEY = import.meta.env.VITE_WEATHER_API_KEY; 
 const node_url = import.meta.env.VITE_NODE_URL;
 
 
